@@ -13,10 +13,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.parse.ParseAnalytics;
+
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +32,18 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
     if (!(sp.getBoolean("@string/signed_in", false))) {
       startActivity(new Intent(MainActivity.this, SignInActivity.class));
+    }
+
+    Calendar cal = Calendar.getInstance();
+    int year = cal.get(Calendar.YEAR);
+    int month = cal.get(Calendar.MONTH);
+    int day = cal.get(Calendar.DAY_OF_MONTH);
+    String date = year + "/" + (month+1) + "/" + day;
+
+    if ((sp.getString("@string/record_updated", null) == null)||(!(sp.getString("@string/record_updated", null).equals(date)))) {
+      Log.e("RECORD_UPDATED", String.valueOf(date) + ":" +
+              " data not yet recorded");
+      startActivity(new Intent(MainActivity.this, WakeUpActivity.class));
     }
     setContentView(R.layout.activity_main);
   }

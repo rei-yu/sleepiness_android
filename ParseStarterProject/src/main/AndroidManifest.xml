@@ -49,7 +49,9 @@
         <activity
             android:name=".SignInActivity"
             android:label="@string/sign_in"/>
-
+        <activity
+            android:name=".WakeUpActivity"
+            android:label="@string/wake_up"/>
         <service android:name="com.parse.PushService"/>
 
         <receiver
