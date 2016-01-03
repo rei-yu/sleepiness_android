@@ -1,6 +1,9 @@
 package com.reiyu.sleepin;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +20,8 @@ import com.parse.SaveCallback;
  * Created by Satomi on 1/3/16.
  */
 public class WakeUpActivity extends FragmentActivity {
+    String date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +35,7 @@ public class WakeUpActivity extends FragmentActivity {
                 int  day  = datePicker.getDayOfMonth();
                 int  month= datePicker.getMonth();
                 int  year = datePicker.getYear();
-                String date = year + "/" + month + "/" + day;
+                date = year + "/" + (month + 1) + "/" + day;
 
                 TimePicker tp1 = (TimePicker) findViewById(R.id.go_to_bed);
                 TimePicker tp2 = (TimePicker) findViewById(R.id.wake_up);
@@ -46,23 +51,40 @@ public class WakeUpActivity extends FragmentActivity {
                 String wake_up_time = hour + ":" + minute;
                 String memo = memoText.getText().toString();
 
-                ParseObject testObject = new ParseObject("SleepRecord");
-                testObject.put("date", date);
-                testObject.put("go_to_bed", go_to_bed_time);
-                testObject.put("wake_up", wake_up_time);
-                testObject.put("memo", memo);
-                testObject.saveInBackground(new SaveCallback() {
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Log.e("Sleep Record", "Successfully saved");
-                        } else {
-                            // Sign up didn't succeed. Look at the ParseException
-                            // to figure out what went wrong
-                            Log.e("Sleep Record", "Error", e);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpActivity.this);
+                String email = sp.getString("@string/email", null);
+
+                if (email != null) {
+                    ParseObject testObject = new ParseObject("SleepRecord");
+                    testObject.put("date", date);
+                    testObject.put("go_to_bed", go_to_bed_time);
+                    testObject.put("wake_up", wake_up_time);
+                    testObject.put("memo", memo);
+                    testObject.put("email", email);
+                    testObject.saveInBackground(new SaveCallback() {
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.e("Sleep Record", "Successfully saved");
+                                wakeUp(date);
+                            } else {
+                                // Sign up didn't succeed. Look at the ParseException
+                                // to figure out what went wrong
+                                Log.e("Sleep Record", "Error", e);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    Log.e("Sleep Record", "email is null");
+                    startActivity(new Intent(WakeUpActivity.this, SignInActivity.class));
+                }
             }
         });
+    }
+
+    private void wakeUp(String date) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putString("@string/record_updated", date).commit();
+
+        startActivity(new Intent(WakeUpActivity.this, MainActivity.class));
     }
 }
