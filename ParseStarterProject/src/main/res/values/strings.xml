@@ -11,17 +11,27 @@
     <string name="parse_app_id">pdaZ7jAa3ZznbNJI0YwHWFQ0ZYdRVvkani7M35Q0</string>
     <string name="parse_client_key">uLe1VwM4NQvZaEW4Lrt638PbtA4DRZszO77se8wa</string>
 
+    <!-- activity labels -->
     <string name="app_name">Sleepin</string>
     <string name="sign_in">Sign in</string>
+    <string name="wake_up">Sleep Record</string>
 
     <string name="hello_world">Hello World!</string>
     <string name="action_settings">Sign out</string>
 
+    <!-- shared preference labels -->
     <string name="signed_in">SIGNED_IN</string>
     <string name="name">NAME</string>
     <string name="email">EMAIL</string>
+    <string name="record_updated">RECORD_UPDATED</string>
 
+    <!-- sign in -->
     <string name="hint_name">Name</string>
     <string name="hint_email">Email</string>
     <string name="hint_pass">Password</string>
+
+    <!-- wake up -->
+    <string name="hint_go_to_bed">Go to bed time (last night)</string>
+    <string name="hint_wake_up">Wake up time</string>
+    <string name="hint_memo">Memo (if any)</string>
 </resources>
