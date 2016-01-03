@@ -7,8 +7,9 @@
   ~ LICENSE file in the root directory of this source tree. An additional grant
   ~ of patent rights can be found in the PATENTS file in the same directory.
   -->
-<manifest package="com.reiyu.sleepin"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.reiyu.sleepin"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -16,9 +17,11 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-    <permission android:protectionLevel="signature"
-                android:name="com.reiyu.sleepin.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.reiyu.sleepin.permission.C2D_MESSAGE" />
+
+    <permission
+        android:name="com.reiyu.sleepin.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.reiyu.sleepin.permission.C2D_MESSAGE"/>
 
 
     <application
