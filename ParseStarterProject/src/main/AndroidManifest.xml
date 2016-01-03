@@ -46,6 +46,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SignInActivity"
+            android:label="@string/sign_in"/>
+
         <service android:name="com.parse.PushService"/>
 
         <receiver
