@@ -12,11 +12,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
 
@@ -51,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
     TextView textView = (TextView) findViewById(R.id.welcome_message);
     String msg = sp.getString("@string/name", null) + "'s Flower";
     textView.setText(msg);
+
+    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    fab.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        Toast.makeText(v.getContext(), "FABが押されました", Toast.LENGTH_SHORT).show();
+      }
+    });
   }
 
   @Override

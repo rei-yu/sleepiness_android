@@ -24,6 +24,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:src="@mipmap/ic_launcher"
-        app:backgroundTint="@color/accent_material_light"/>
+        app:backgroundTint="@color/accent_material_light"
+        app:fabSize="normal"/>
 
 </RelativeLayout>
