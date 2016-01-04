@@ -20,7 +20,7 @@
     <string name="sleepiness_updated">SLEEPINESS_UPDATED</string>
 
     <!-- sign in -->
-    <string name="hint_name">Name</string>
+    <string name="hint_name">Username</string>
     <string name="hint_email">Email</string>
     <string name="hint_pass">Password</string>
 
