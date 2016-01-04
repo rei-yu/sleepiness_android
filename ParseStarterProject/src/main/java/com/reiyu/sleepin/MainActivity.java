@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.parse.ParseAnalytics;
 
@@ -46,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
       startActivity(new Intent(MainActivity.this, WakeUpFragment.class));
     }
     setContentView(R.layout.activity_main);
+
+    TextView textView = (TextView) findViewById(R.id.welcome_message);
+    String msg = sp.getString("@string/name", null) + "'s Flower";
+    textView.setText(msg);
   }
 
   @Override
