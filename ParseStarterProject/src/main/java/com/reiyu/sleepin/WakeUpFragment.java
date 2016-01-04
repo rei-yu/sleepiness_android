@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -19,7 +20,7 @@ import com.parse.SaveCallback;
 /**
  * Created by Satomi on 1/3/16.
  */
-public class WakeUpActivity extends FragmentActivity {
+public class WakeUpFragment extends FragmentActivity {
     String date;
 
     @Override
@@ -51,7 +52,7 @@ public class WakeUpActivity extends FragmentActivity {
                 String wake_up_time = hour + ":" + minute;
                 String memo = memoText.getText().toString();
 
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpActivity.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
                 String email = sp.getString("@string/email", null);
 
                 if (email != null) {
@@ -75,7 +76,8 @@ public class WakeUpActivity extends FragmentActivity {
                     });
                 } else {
                     Log.e("Sleep Record", "email is null");
-                    startActivity(new Intent(WakeUpActivity.this, SignInActivity.class));
+                    Toast.makeText(WakeUpFragment.this, "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
+                    startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
                 }
             }
         });
@@ -85,6 +87,6 @@ public class WakeUpActivity extends FragmentActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putString("@string/record_updated", date).commit();
 
-        startActivity(new Intent(WakeUpActivity.this, MainActivity.class));
+        startActivity(new Intent(WakeUpFragment.this, MainActivity.class));
     }
 }

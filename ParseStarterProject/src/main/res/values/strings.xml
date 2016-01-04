@@ -7,6 +7,7 @@
     <string name="app_name">Sleepin</string>
     <string name="sign_in">Sign in</string>
     <string name="wake_up">Sleep Record</string>
+    <string name="reflect">Session Reflection</string>
 
     <string name="hello_world">Hello World!</string>
     <string name="action_settings">Sign out</string>
@@ -27,4 +28,12 @@
     <string name="hint_go_to_bed">Go to bed time (last night)</string>
     <string name="hint_wake_up">Wake up time</string>
     <string name="hint_memo">Memo (if any)</string>
+
+    <!-- reflect-->
+    <string name="check_sleepiness">Were you sleepy for this session?</string>
+    <string name="sleepiness5">昼寝した</string>
+    <string name="sleepiness4">座ったまま寝落ちた</string>
+    <string name="sleepiness3">船をこいだ</string>
+    <string name="sleepiness2">うとうとした</string>
+    <string name="sleepiness1">一切眠くなかった</string>
 </resources>

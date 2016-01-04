@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
     if (!(sp.getBoolean("@string/signed_in", false))) {
-      startActivity(new Intent(MainActivity.this, SignInActivity.class));
+      startActivity(new Intent(MainActivity.this, SignInFragment.class));
     }
 
     Calendar cal = Calendar.getInstance();
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     if ((sp.getString("@string/record_updated", null) == null)||(!(sp.getString("@string/record_updated", null).equals(date)))) {
       Log.e("RECORD_UPDATED", String.valueOf(date) + ":" +
               " data not yet recorded");
-      startActivity(new Intent(MainActivity.this, WakeUpActivity.class));
+      startActivity(new Intent(MainActivity.this, WakeUpFragment.class));
     }
     setContentView(R.layout.activity_main);
   }

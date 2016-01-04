@@ -17,7 +17,7 @@ import com.parse.SignUpCallback;
 /**
  * Created by Satomi on 1/3/16.
  */
-public class SignInActivity extends FragmentActivity {
+public class SignInFragment extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +38,7 @@ public class SignInActivity extends FragmentActivity {
                 user.setEmail(email);
                 user.setPassword(passText.getText().toString());
 
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInActivity.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
                 sp.edit().putString("@string/name", name).commit();
                 sp.edit().putString("@string/email", email).commit();
 
@@ -61,6 +61,6 @@ public class SignInActivity extends FragmentActivity {
     protected void signIn() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putBoolean("@string/signed_in", true).commit();
-        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+        startActivity(new Intent(SignInFragment.this, MainActivity.class));
     }
 }

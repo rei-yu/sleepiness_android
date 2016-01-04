@@ -14,7 +14,7 @@ public class Receiver extends ParsePushBroadcastReceiver {
     protected void onPushOpen(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
 
-        Intent i = new Intent(context,MainActivity.class);
+        Intent i = new Intent(context, ReflectFragment.class);
         i.putExtras(bundle);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
