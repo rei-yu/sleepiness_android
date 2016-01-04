@@ -14,7 +14,7 @@
 
     <!-- shared preference labels -->
     <string name="signed_in">SIGNED_IN</string>
-    <string name="name">NAME</string>
+    <string name="username">USERNAME</string>
     <string name="email">EMAIL</string>
     <string name="record_updated">SLEEP_RECORD_UPDATED</string>
     <string name="sleepiness_updated">SLEEPINESS_UPDATED</string>

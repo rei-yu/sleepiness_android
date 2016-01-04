@@ -53,15 +53,15 @@ public class WakeUpFragment extends FragmentActivity {
                 String memo = memoText.getText().toString();
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
-                String email = sp.getString("@string/email", null);
+                String username = sp.getString("@string/username", null);
 
-                if (email != null) {
+                if (username != null) {
                     ParseObject testObject = new ParseObject("SleepRecord");
                     testObject.put("date", date);
                     testObject.put("go_to_bed", go_to_bed_time);
                     testObject.put("wake_up", wake_up_time);
                     testObject.put("memo", memo);
-                    testObject.put("email", email);
+                    testObject.put("username", username);
                     testObject.saveInBackground(new SaveCallback() {
                         public void done(ParseException e) {
                             if (e == null) {
@@ -75,7 +75,7 @@ public class WakeUpFragment extends FragmentActivity {
                         }
                     });
                 } else {
-                    Log.e("Sleep Record", "email is null");
+                    Log.e("Sleep Record", "username is null");
                     Toast.makeText(WakeUpFragment.this, "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
                     startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
                 }

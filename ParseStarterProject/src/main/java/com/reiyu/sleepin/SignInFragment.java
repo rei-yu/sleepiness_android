@@ -34,15 +34,15 @@ public class SignInFragment extends FragmentActivity {
                 EditText emailText = (EditText) findViewById(R.id.email_register);
                 EditText passText = (EditText) findViewById(R.id.password_register);
 
-                String name = nameText.getText().toString();
+                String username = nameText.getText().toString();
                 String email = emailText.getText().toString();
                 ParseUser user = new ParseUser();
-                user.setUsername(name);
+                user.setUsername(username);
                 user.setEmail(email);
                 user.setPassword(passText.getText().toString());
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
-                sp.edit().putString("@string/name", name).commit();
+                sp.edit().putString("@string/name", username).commit();
                 sp.edit().putString("@string/email", email).commit();
 
                 user.signUpInBackground(new SignUpCallback() {
@@ -65,16 +65,16 @@ public class SignInFragment extends FragmentActivity {
                 EditText nameText = (EditText) findViewById(R.id.name_sign_in);
                 EditText passText = (EditText) findViewById(R.id.password_sign_in);
 
-                String name = nameText.getText().toString();
+                String username = nameText.getText().toString();
                 String pass = passText.getText().toString();
                 ParseUser user = new ParseUser();
-                user.setUsername(name);
+                user.setUsername(username);
                 user.setPassword(passText.getText().toString());
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
-                sp.edit().putString("@string/name", name).commit();
+                sp.edit().putString("@string/username", username).commit();
 
-                ParseUser.logInInBackground(name, pass, new LogInCallback() {
+                ParseUser.logInInBackground(username, pass, new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
                             signIn();
