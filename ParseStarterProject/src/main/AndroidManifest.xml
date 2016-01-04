@@ -47,15 +47,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignInActivity"
+            android:name=".SignInFragment"
             android:label="@string/sign_in"/>
         <activity
-            android:name=".WakeUpActivity"
+            android:name=".WakeUpFragment"
             android:label="@string/wake_up"/>
+        <service android:name="com.parse.PushService"/>
+        <activity
+            android:name=".ReflectFragment"
+            android:label="@string/reflect"/>
+
         <service android:name="com.parse.PushService"/>
 
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:name="com.reiyu.sleepin.Receiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE"/>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/session"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.reiyu.Title"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/check_sleepiness"
+        android:textAppearance="@style/TextAppearance.reiyu.Body"/>
+
+    <Button
+        android:id="@+id/sleepiness1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sleepiness1"/>
+
+    <Button
+        android:id="@+id/sleepiness2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sleepiness2"/>
+
+    <Button
+        android:id="@+id/sleepiness3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sleepiness3"/>
+
+    <Button
+        android:id="@+id/sleepiness4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sleepiness4"/>
+
+    <Button
+        android:id="@+id/sleepiness5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sleepiness5"/>
+</LinearLayout>
