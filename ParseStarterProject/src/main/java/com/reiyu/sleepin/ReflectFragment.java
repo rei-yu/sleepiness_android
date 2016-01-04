@@ -83,7 +83,6 @@ public class ReflectFragment extends FragmentActivity {
                 sendSleepinessRecord(5);
             }
         });
-
     }
 
     private void setSession(TextView textView) {
