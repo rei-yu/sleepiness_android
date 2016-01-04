@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.parse.ParseAnalytics;
+import com.parse.ParseUser;
 
 import java.util.Calendar;
 
@@ -71,9 +72,15 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sign_out) {
+            signOut();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void signOut() {
+        ParseUser.logOut();
+        startActivity(new Intent(MainActivity.this, SignInFragment.class));
     }
 }
