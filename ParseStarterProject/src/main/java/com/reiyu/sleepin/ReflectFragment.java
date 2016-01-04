@@ -54,7 +54,6 @@ public class ReflectFragment extends FragmentActivity {
                 sendSleepinessRecord(1);
             }
         });
-
         Button bt2 = (Button) findViewById(R.id.sleepiness2);
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override

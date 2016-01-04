@@ -90,6 +90,8 @@ public class SignInFragment extends FragmentActivity {
     protected void signIn() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putBoolean("@string/signed_in", true).commit();
+
+        Log.d(TAG, "Successfully Sign in");
         startActivity(new Intent(SignInFragment.this, MainActivity.class));
     }
 }
