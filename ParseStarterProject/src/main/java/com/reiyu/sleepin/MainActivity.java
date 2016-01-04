@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
 
@@ -58,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        Toast.makeText(v.getContext(), "FABが押されました", Toast.LENGTH_SHORT).show();
+        Log.e("Floating Action Button", "clicked");
+        startActivity(new Intent(MainActivity.this, ReflectFragment.class));
       }
     });
   }
