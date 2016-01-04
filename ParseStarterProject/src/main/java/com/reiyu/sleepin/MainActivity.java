@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     int year = cal.get(Calendar.YEAR);
     int month = cal.get(Calendar.MONTH);
     int day = cal.get(Calendar.DAY_OF_MONTH);
-    String date = year + "/" + (month+1) + "/" + day;
+    String date = year + "/" + (month + 1) + "/" + day;
 
     if ((sp.getString("@string/record_updated", null) == null)||(!(sp.getString("@string/record_updated", null).equals(date)))) {
       Log.e("RECORD_UPDATED", String.valueOf(date) + ":" +

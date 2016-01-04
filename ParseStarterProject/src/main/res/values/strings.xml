@@ -16,7 +16,8 @@
     <string name="signed_in">SIGNED_IN</string>
     <string name="name">NAME</string>
     <string name="email">EMAIL</string>
-    <string name="record_updated">RECORD_UPDATED</string>
+    <string name="record_updated">SLEEP_RECORD_UPDATED</string>
+    <string name="sleepiness_updated">SLEEPINESS_UPDATED</string>
 
     <!-- sign in -->
     <string name="hint_name">Name</string>
@@ -30,10 +31,10 @@
     <string name="hint_memo">Memo (if any)</string>
 
     <!-- reflect-->
-    <string name="check_sleepiness">Were you sleepy for this session?</string>
-    <string name="sleepiness5">昼寝した</string>
+    <string name="check_sleepiness">Were you sleepy during this session?</string>
+    <string name="sleepiness5">昼寝をした</string>
     <string name="sleepiness4">座ったまま寝落ちた</string>
-    <string name="sleepiness3">船をこいだ</string>
+    <string name="sleepiness3">意識が何度か途切れた</string>
     <string name="sleepiness2">うとうとした</string>
     <string name="sleepiness1">一切眠くなかった</string>
 </resources>
