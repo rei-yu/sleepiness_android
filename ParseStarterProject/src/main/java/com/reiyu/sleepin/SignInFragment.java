@@ -42,7 +42,7 @@ public class SignInFragment extends FragmentActivity {
                 user.setPassword(passText.getText().toString());
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
-                sp.edit().putString("@string/name", username).commit();
+                sp.edit().putString("@string/username", username).commit();
                 sp.edit().putString("@string/email", email).commit();
 
                 user.signUpInBackground(new SignUpCallback() {
