@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!(sp.getBoolean("@string/signed_in", false))) {
+            Log.e("Main Activity", "user null");
             startActivity(new Intent(MainActivity.this, SignInFragment.class));
         }
 
