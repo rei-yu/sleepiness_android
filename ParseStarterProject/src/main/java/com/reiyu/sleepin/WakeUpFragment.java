@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,12 +16,13 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 /**
  * Created by Satomi on 1/3/16.
  */
-public class WakeUpFragment extends FragmentActivity {
+public class WakeUpFragment extends AppCompatActivity {
     String date;
 
     @Override
@@ -89,5 +91,27 @@ public class WakeUpFragment extends FragmentActivity {
         Toast.makeText(WakeUpFragment.this, "Sleep Record is successfully saved.", Toast.LENGTH_SHORT);
 
         startActivity(new Intent(WakeUpFragment.this, MainActivity.class));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_sign_out) {
+            signOut();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void signOut() {
+        ParseUser.logOut();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putBoolean("@string/signed_in", false).commit();
+        sp.edit().putString("@string/username", null).commit();
+        sp.edit().putString("@string/email", null).commit();
+        startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
     }
 }

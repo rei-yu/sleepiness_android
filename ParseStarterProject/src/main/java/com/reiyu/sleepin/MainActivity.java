@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         String date = year + "/" + (month + 1) + "/" + day;
 
+        // TODO: should coinsider user change (fundamentally should judge from get response)
         if ((sp.getString("@string/record_updated", null) == null) || (!(sp.getString("@string/record_updated", null).equals(date)))) {
             Log.e("RECORD_UPDATED", String.valueOf(date) + ":" +
                     " data not yet recorded");
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView textView = (TextView) findViewById(R.id.welcome_message);
-        String msg = sp.getString("@string/name", null) + "'s Flower";
+        String msg = sp.getString("@string/username", null) + "'s Flower";
         textView.setText(msg);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -80,8 +81,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void signOut() {
+    private void signOut() {
         ParseUser.logOut();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putBoolean("@string/signed_in", false).commit();
+        sp.edit().putString("@string/username", null).commit();
+        sp.edit().putString("@string/email", null).commit();
         startActivity(new Intent(MainActivity.this, SignInFragment.class));
     }
 }
