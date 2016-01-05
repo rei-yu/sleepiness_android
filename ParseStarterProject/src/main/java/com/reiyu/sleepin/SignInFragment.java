@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +18,7 @@ import com.parse.SignUpCallback;
 /**
  * Created by Satomi on 1/3/16.
  */
-public class SignInFragment extends FragmentActivity {
+public class SignInFragment extends AppCompatActivity {
     final static String TAG = "Sign in";
 
     @Override

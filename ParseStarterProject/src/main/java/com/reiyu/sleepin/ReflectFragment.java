@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Calendar;
@@ -20,7 +23,7 @@ import java.util.Calendar;
 /**
  * Created by Satomi on 1/3/16.
  */
-public class ReflectFragment extends FragmentActivity {
+public class ReflectFragment extends AppCompatActivity {
     String date = "0000/00/00";
     int session_num = 0;
 
@@ -82,6 +85,35 @@ public class ReflectFragment extends FragmentActivity {
                 sendSleepinessRecord(5);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_sign_out) {
+            signOut();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void signOut() {
+        ParseUser.logOut();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putBoolean("@string/signed_in", false).commit();
+        sp.edit().putString("@string/username", null).commit();
+        sp.edit().putString("@string/email", null).commit();
+        startActivity(new Intent(ReflectFragment.this, SignInFragment.class));
     }
 
     private void setSession(TextView textView) {
