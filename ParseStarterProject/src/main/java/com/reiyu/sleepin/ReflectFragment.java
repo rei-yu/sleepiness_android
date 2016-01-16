@@ -211,14 +211,14 @@ public class ReflectFragment extends AppCompatActivity {
 
     private void sendSleepinessRecord(int sleepiness) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
-        String email = sp.getString("@string/email", null);
+        String username = sp.getString("@string/username", null);
 
-        if (email != null) {
+        if (username != null) {
             ParseObject testObject = new ParseObject("SleepinessRecord");
             testObject.put("date", date);
             testObject.put("session", session_num);
             testObject.put("sleepiness", sleepiness);
-            testObject.put("email", email);
+            testObject.put("username", username);
             testObject.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
@@ -245,7 +245,7 @@ public class ReflectFragment extends AppCompatActivity {
     }
 
     private void invalidUserInfo() {
-        Log.e("Sleep Record", "email is null");
+        Log.e("Sleep Record", "username is null");
         Toast.makeText(ReflectFragment.this, "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
         
         startActivity(new Intent(ReflectFragment.this, SignInFragment.class));
