@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <permission
@@ -44,6 +45,7 @@
         <activity
             android:name=".WakeUpFragment"
             android:label="@string/wake_up"/>
+
         <service android:name="com.parse.PushService"/>
         <activity
             android:name=".ReflectFragment"
@@ -70,6 +72,15 @@
                 <category android:name="com.reiyu.sleepin"/>
             </intent-filter>
         </receiver>
+
+        <receiver android:name="SessionReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".SessionService">
+        </service>
     </application>
 
 </manifest>

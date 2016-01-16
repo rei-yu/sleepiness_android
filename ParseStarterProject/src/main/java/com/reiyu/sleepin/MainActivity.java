@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
@@ -25,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+        SessionReceiver.scheduleAlarms(this);
+
+        Toast.makeText(this, "alarm has set", Toast.LENGTH_LONG)
+                .show();
+        finish();
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!(sp.getBoolean("@string/signed_in", false))) {
             Log.e("Main Activity", "user null");
@@ -37,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         String date = year + "/" + (month + 1) + "/" + day;
 
-        // TODO: should coinsider user change (fundamentally should judge from get response)
+        // TODO: should consider user change (fundamentally should judge from get response)
         if ((sp.getString("@string/record_updated", null) == null) || (!(sp.getString("@string/record_updated", null).equals(date)))) {
             Log.e("RECORD_UPDATED", String.valueOf(date) + ":" +
                     " data not yet recorded");
