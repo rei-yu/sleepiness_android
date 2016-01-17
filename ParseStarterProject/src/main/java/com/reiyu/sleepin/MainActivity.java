@@ -111,11 +111,37 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         int score = sp.getInt("@string/healthy_score", 100);
         int cons = sp.getInt("@string/healthy_consequence", 0);
-        
+        boolean hasClover2 = sp.getBoolean("@string/clover2", false);
+        boolean hasPot2 = sp.getBoolean("@string/pot2", false);
+        boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
+        boolean hasClover = sp.getBoolean("@string/clover", false);
+        boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
+        boolean hasButterfly = sp.getBoolean("@string/clover2", false);
+        boolean hasLeaf = sp.getBoolean("@string/leaf", false);
+        boolean hasPot = sp.getBoolean("@string/pot", false);
+
         ImageView flower = (ImageView) findViewById(R.id.flower);
 
         if (score > 60) {
-            flower.setImageResource(R.drawable.happy_u_l);
+            if (hasClover2) {
+
+            } else if (hasPot2) {
+
+            } else if (hasButterfly2) {
+                flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
+            } else if (hasClover) {
+                flower.setImageResource(R.drawable.happy_u_l_b_t_c);
+            } else if (hasLadybug) {
+                flower.setImageResource(R.drawable.happy_u_l_b_t);
+            } else if (hasButterfly) {
+                flower.setImageResource(R.drawable.happy_u_l_b);
+            } else if (hasLeaf) {
+                flower.setImageResource(R.drawable.happy_u_l);
+            } else if (hasPot) {
+                flower.setImageResource(R.drawable.happy_u);
+            } else {
+//                flower.setImageResource(R.drawable.happy);
+            }
         }
     }
 }
