@@ -110,9 +110,8 @@ public class MainActivity extends AppCompatActivity {
     public void getFlowerState() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         int score = sp.getInt("@string/healthy_score", 100);
-        int cons = sp.getInt("@string/healthy_consequence", 0);
+//        int cons = sp.getInt("@string/healthy_consequence", 0);
         boolean hasClover2 = sp.getBoolean("@string/clover2", false);
-        boolean hasPot2 = sp.getBoolean("@string/pot2", false);
         boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
         boolean hasClover = sp.getBoolean("@string/clover", false);
         boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
@@ -124,9 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (score > 60) {
             if (hasClover2) {
-
-            } else if (hasPot2) {
-
+                flower.setImageResource(R.drawable.happy_u_l_b_t_c_a_y);
             } else if (hasButterfly2) {
                 flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
             } else if (hasClover) {
@@ -140,7 +137,23 @@ public class MainActivity extends AppCompatActivity {
             } else if (hasPot) {
                 flower.setImageResource(R.drawable.happy_u);
             } else {
-//                flower.setImageResource(R.drawable.happy);
+                flower.setImageResource(R.drawable.happy);
+            }
+        } else if (score > 30) {
+            if (hasButterfly) {
+                flower.setImageResource(R.drawable.nogood_u_l_b);
+            } else if (hasLeaf) {
+                flower.setImageResource(R.drawable.nogood_u_l);
+            } else if (hasPot) {
+                flower.setImageResource(R.drawable.nogood_u);
+            } else {
+                flower.setImageResource(R.drawable.nogood);
+            }
+        } else {
+            if (hasPot) {
+                flower.setImageResource(R.drawable.bad_u);
+            } else {
+                flower.setImageResource(R.drawable.bad);
             }
         }
     }
