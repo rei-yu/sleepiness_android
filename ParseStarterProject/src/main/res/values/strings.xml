@@ -4,7 +4,7 @@
     <string name="parse_client_key">uLe1VwM4NQvZaEW4Lrt638PbtA4DRZszO77se8wa</string>
 
     <!-- activity labels -->
-    <string name="app_name">Sleepin</string>
+    <string name="app_name">Sleep Flower</string>
     <string name="sign_in">Sign in</string>
     <string name="wake_up">Sleep Record</string>
     <string name="reflect">Session Reflection</string>
