@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                getFlowerState();
             }
         }
     }
@@ -102,5 +105,17 @@ public class MainActivity extends AppCompatActivity {
         sp.edit().putString("@string/username", null).commit();
         sp.edit().putString("@string/email", null).commit();
         startActivity(new Intent(MainActivity.this, SignInFragment.class));
+    }
+
+    public void getFlowerState() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        int score = sp.getInt("@string/healthy_score", 100);
+        int cons = sp.getInt("@string/healthy_consequence", 0);
+        
+        ImageView flower = (ImageView) findViewById(R.id.flower);
+
+        if (score > 60) {
+            flower.setImageResource(R.drawable.happy_u_l);
+        }
     }
 }

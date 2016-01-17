@@ -18,6 +18,8 @@
     <string name="email">EMAIL</string>
     <string name="record_updated">SLEEP_RECORD_UPDATED</string>
     <string name="sleepiness_updated">SLEEPINESS_UPDATED</string>
+    <string name="healthy_consequence">HEALTHY_CONSEQUENCE</string>
+    <string name="healthy_score">HEALTHY_SCORE</string>
 
     <!-- sign in -->
     <string name="hint_name">Username</string>

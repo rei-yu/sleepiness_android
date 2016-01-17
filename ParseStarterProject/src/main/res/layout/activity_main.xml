@@ -15,6 +15,14 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.reiyu.Title"/>
 
+    <ImageView
+        android:id="@+id/flower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_message"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
