@@ -25,7 +25,7 @@ import java.util.Calendar;
  */
 public class ReflectFragment extends AppCompatActivity {
     String date = "0000/00/00";
-    int session_num = 0;
+    static private int session_num = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,8 +126,9 @@ public class ReflectFragment extends AppCompatActivity {
         }
     }
 
-    private String getSession() {
+    public static String getSession() {
         Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, -90);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
         String session;
@@ -203,10 +204,14 @@ public class ReflectFragment extends AppCompatActivity {
                 break;
             default:
                 session = "Session is not held now";
-                Toast.makeText(ReflectFragment.this, "Sessionは9:00~21:00です", Toast.LENGTH_SHORT);
+                session_num = 0;
                 break;
         }
         return session;
+    }
+
+    public static int getSessionNum(){
+        return session_num;
     }
 
     private void sendSleepinessRecord(int sleepiness) {

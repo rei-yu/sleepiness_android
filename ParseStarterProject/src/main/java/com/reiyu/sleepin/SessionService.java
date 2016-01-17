@@ -5,7 +5,6 @@ package com.reiyu.sleepin;
  */
 
 import android.content.Intent;
-
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
@@ -17,6 +16,8 @@ public class SessionService extends WakefulIntentService {
 
     @Override
     protected void doWakefulWork(Intent intent) {
-        Log.e(getClass().getSimpleName(), "I ran!");
+        Log.e("dowakefulWork", "running");
+
+        SessionReceiver.scheduleAlarms(this);
     }
 }

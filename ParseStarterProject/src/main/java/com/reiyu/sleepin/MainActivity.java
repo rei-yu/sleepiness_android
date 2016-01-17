@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
@@ -19,17 +20,12 @@ import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
-
-//        SessionReceiver.scheduleAlarms(this);
-//
-//        Toast.makeText(this, "alarm has set", Toast.LENGTH_LONG)
-//                .show();
-//        finish();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -41,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            String date = year + "/" + (month + 1) + "/" + day;
+            date = year + "/" + (month + 1) + "/" + day;
 
             // TODO: should consider user change (fundamentally should judge from get response)
             if ((sp.getString("@string/record_updated", null) == null) || (!(sp.getString("@string/record_updated", null).equals(date)))) {
@@ -58,8 +54,17 @@ public class MainActivity extends AppCompatActivity {
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
                 fab.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Log.e("Floating Action Button", "clicked");
-                        startActivity(new Intent(MainActivity.this, ReflectFragment.class));
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        String msg = ReflectFragment.getSession();
+                        int session_num = ReflectFragment.getSessionNum();
+
+                        if (session_num == 0) {
+                            Toast.makeText(MainActivity.this, "Session is 9:00 ~ 21:00\nPlease wait until 10:30 for reflection", Toast.LENGTH_LONG).show();
+                        } else if ((sp.getString("@string/sleepiness_updated", null) == null) || (!(sp.getString("@string/sleepiness_updated", null).equals(date + session_num)))) {
+                            startActivity(new Intent(MainActivity.this, ReflectFragment.class));
+                        } else {
+                            Toast.makeText(MainActivity.this, "You have already reflected\nsession " + msg + ".", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
             }
