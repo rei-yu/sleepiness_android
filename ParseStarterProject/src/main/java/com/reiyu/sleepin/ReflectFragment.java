@@ -13,19 +13,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Satomi on 1/3/16.
  */
 public class ReflectFragment extends AppCompatActivity {
     String date = "0000/00/00";
-    int session_num = 0;
+    static private int session_num = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,48 +44,159 @@ public class ReflectFragment extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         date = year + "/" + (month + 1) + "/" + day;
 
+        getSession();
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
         String sleepiness_updated = sp.getString("@string/sleepiness_updated", "0000/00/00");
-        if (sleepiness_updated.equals(date + session_num)) {
-            Log.e("Sleepiness Record", "already saved for this session");
-            Toast.makeText(ReflectFragment.this, "already saved for this session", Toast.LENGTH_SHORT);
-
-            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
-        }
 
         Button bt1 = (Button) findViewById(R.id.sleepiness1);
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendSleepinessRecord(1);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                getSession();
+
+                query.whereEqualTo("username", sp.getString("@string/username", null));
+                query.whereEqualTo("session", session_num);
+                query.whereEqualTo("date", date);
+
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
+                        if (e == null) {
+                            if (sleepinessRecordList.size() < 1) {
+                                setScore(35);
+                                sendSleepinessRecord(1);
+                            } else {
+                                Log.e("SleepinessRecord", "already registered");
+                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            }
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                        }
+                    }
+                });
             }
         });
         Button bt2 = (Button) findViewById(R.id.sleepiness2);
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendSleepinessRecord(2);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                getSession();
+
+                query.whereEqualTo("username", sp.getString("@string/username", null));
+                query.whereEqualTo("session", session_num);
+                query.whereEqualTo("date", date);
+
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
+                        if (e == null) {
+                            if (sleepinessRecordList.size() < 1) {
+                                setScore(5);
+                                sendSleepinessRecord(2);
+                            } else {
+                                Log.e("SleepinessRecord", "already registered");
+                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            }
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                        }
+                    }
+                });
             }
         });
         Button bt3 = (Button) findViewById(R.id.sleepiness3);
         bt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendSleepinessRecord(3);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                getSession();
+
+                query.whereEqualTo("username", sp.getString("@string/username", null));
+                query.whereEqualTo("session", session_num);
+                query.whereEqualTo("date", date);
+
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
+                        if (e == null) {
+                            if (sleepinessRecordList.size() < 1) {
+                                setScore(-20);
+                                sendSleepinessRecord(3);
+                            } else {
+                                Log.e("SleepinessRecord", "already registered");
+                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            }
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                        }
+                    }
+                });
             }
         });
         Button bt4 = (Button) findViewById(R.id.sleepiness4);
         bt4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendSleepinessRecord(4);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                getSession();
+
+                query.whereEqualTo("username", sp.getString("@string/username", null));
+                query.whereEqualTo("session", session_num);
+                query.whereEqualTo("date", date);
+
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
+                        if (e == null) {
+                            if (sleepinessRecordList.size() < 1) {
+                                setScore(-30);
+                                sendSleepinessRecord(4);
+                            } else {
+                                Log.e("SleepinessRecord", "already registered");
+                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            }
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                        }
+                    }
+                });
             }
         });
         Button bt5 = (Button) findViewById(R.id.sleepiness5);
         bt5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendSleepinessRecord(5);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                getSession();
+
+                query.whereEqualTo("username", sp.getString("@string/username", null));
+                query.whereEqualTo("session", session_num);
+                query.whereEqualTo("date", date);
+
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
+                        if (e == null) {
+                            if (sleepinessRecordList.size() < 1) {
+                                setScore(-45);
+                                sendSleepinessRecord(5);
+                            } else {
+                                Log.e("SleepinessRecord", "already registered");
+                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            }
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                        }
+                    }
+                });
             }
         });
     }
@@ -126,8 +240,9 @@ public class ReflectFragment extends AppCompatActivity {
         }
     }
 
-    private String getSession() {
+    public static String getSession() {
         Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, -90);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
         String session;
@@ -203,22 +318,28 @@ public class ReflectFragment extends AppCompatActivity {
                 break;
             default:
                 session = "Session is not held now";
-                Toast.makeText(ReflectFragment.this, "Sessionは9:00~21:00です", Toast.LENGTH_SHORT);
+                session_num = 0;
                 break;
         }
         return session;
     }
 
+    public static int getSessionNum() {
+        return session_num;
+    }
+
     private void sendSleepinessRecord(int sleepiness) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
-        String email = sp.getString("@string/email", null);
+        String username = sp.getString("@string/username", null);
+        int score = sp.getInt("@string/healthy_score", 0);
 
-        if (email != null) {
+        if (username != null) {
             ParseObject testObject = new ParseObject("SleepinessRecord");
             testObject.put("date", date);
             testObject.put("session", session_num);
             testObject.put("sleepiness", sleepiness);
-            testObject.put("email", email);
+            testObject.put("score", score);
+            testObject.put("username", username);
             testObject.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
@@ -245,9 +366,21 @@ public class ReflectFragment extends AppCompatActivity {
     }
 
     private void invalidUserInfo() {
-        Log.e("Sleep Record", "email is null");
+        Log.e("Sleep Record", "username is null");
         Toast.makeText(ReflectFragment.this, "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
-        
+
         startActivity(new Intent(ReflectFragment.this, SignInFragment.class));
+    }
+
+    private void setScore(int diff) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+        int score = sp.getInt("@string/healthy_score", 0);
+        score = score + diff;
+        if (score < 0) {
+            score = 0;
+        } else if (score > 100) {
+            score = 100;
+        }
+        sp.edit().putInt("@string/healthy_score", score).commit();
     }
 }

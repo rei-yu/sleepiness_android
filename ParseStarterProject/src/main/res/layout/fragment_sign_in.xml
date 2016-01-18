@@ -16,7 +16,9 @@
             android:id="@+id/name_sign_in"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_name"/>
+            android:hint="@string/hint_name"
+            android:imeOptions="actionNext"
+            android:inputType="text"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -27,7 +29,9 @@
             android:id="@+id/password_sign_in"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_pass"/>
+            android:hint="@string/hint_pass"
+            android:imeOptions="actionDone"
+            android:inputType="text"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button
@@ -52,7 +56,8 @@
             android:id="@+id/name_register"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_name"/>
+            android:hint="@string/hint_name"
+            android:imeOptions="actionNext"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -63,7 +68,9 @@
             android:id="@+id/email_register"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_email"/>
+            android:hint="@string/hint_email"
+            android:imeOptions="actionNext"
+            android:inputType="text"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -74,7 +81,9 @@
             android:id="@+id/password_register"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_pass"/>
+            android:hint="@string/hint_pass"
+            android:imeOptions="actionSend"
+            android:inputType="text"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button

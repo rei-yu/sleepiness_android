@@ -31,27 +31,38 @@ public class WakeUpFragment extends AppCompatActivity {
 
         setContentView(R.layout.fragment_wake_up);
         Button button = (Button) findViewById(R.id.save_record);
+
+        DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year = datePicker.getYear();
+        date = year + "/" + (month + 1) + "/" + day;
+
+        TimePicker tp1 = (TimePicker) findViewById(R.id.go_to_bed);
+        tp1.setCurrentHour(23);
+        tp1.setCurrentMinute(00);
+        tp1.setIs24HourView(true);
+
+        TimePicker tp2 = (TimePicker) findViewById(R.id.wake_up);
+        tp2.setIs24HourView(true);
+
+        EditText memoText = (EditText) findViewById(R.id.memo);
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
-                int day = datePicker.getDayOfMonth();
-                int month = datePicker.getMonth();
-                int year = datePicker.getYear();
-                date = year + "/" + (month + 1) + "/" + day;
-
                 TimePicker tp1 = (TimePicker) findViewById(R.id.go_to_bed);
-                TimePicker tp2 = (TimePicker) findViewById(R.id.wake_up);
-                tp1.setIs24HourView(true);
-                tp1.setIs24HourView(true);
-                EditText memoText = (EditText) findViewById(R.id.memo);
-
                 int hour = tp1.getCurrentHour();
                 int minute = tp1.getCurrentMinute();
                 String go_to_bed_time = hour + ":" + minute;
+
+                TimePicker tp2 = (TimePicker) findViewById(R.id.wake_up);
                 hour = tp2.getCurrentHour();
                 minute = tp2.getCurrentMinute();
                 String wake_up_time = hour + ":" + minute;
+
+                EditText memoText = (EditText) findViewById(R.id.memo);
                 String memo = memoText.getText().toString();
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
@@ -88,6 +99,8 @@ public class WakeUpFragment extends AppCompatActivity {
     private void wakeUp(String date) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putString("@string/record_updated", date).commit();
+        sp.edit().putInt("@string/healthy_score", 100).commit();
+
         Toast.makeText(WakeUpFragment.this, "Sleep Record is successfully saved.", Toast.LENGTH_SHORT);
 
         startActivity(new Intent(WakeUpFragment.this, MainActivity.class));
