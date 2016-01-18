@@ -54,6 +54,7 @@ public class ReflectFragment extends AppCompatActivity {
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setScore(+35);
                 sendSleepinessRecord(1);
             }
         });
@@ -61,6 +62,7 @@ public class ReflectFragment extends AppCompatActivity {
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setScore(+5);
                 sendSleepinessRecord(2);
             }
         });
@@ -68,6 +70,7 @@ public class ReflectFragment extends AppCompatActivity {
         bt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setScore(-20);
                 sendSleepinessRecord(3);
             }
         });
@@ -75,6 +78,7 @@ public class ReflectFragment extends AppCompatActivity {
         bt4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setScore(-30);
                 sendSleepinessRecord(4);
             }
         });
@@ -82,6 +86,7 @@ public class ReflectFragment extends AppCompatActivity {
         bt5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setScore(-45);
                 sendSleepinessRecord(5);
             }
         });
@@ -210,7 +215,7 @@ public class ReflectFragment extends AppCompatActivity {
         return session;
     }
 
-    public static int getSessionNum(){
+    public static int getSessionNum() {
         return session_num;
     }
 
@@ -252,7 +257,19 @@ public class ReflectFragment extends AppCompatActivity {
     private void invalidUserInfo() {
         Log.e("Sleep Record", "username is null");
         Toast.makeText(ReflectFragment.this, "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
-        
+
         startActivity(new Intent(ReflectFragment.this, SignInFragment.class));
+    }
+
+    private void setScore(int diff) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+        int score = sp.getInt("@string/healthy_score", 0);
+        score = score + diff;
+        if (score < 0) {
+            score = 0;
+        } else if (score > 100) {
+            score = 100;
+        }
+        sp.edit().putInt("@string/healthy_score", score);
     }
 }

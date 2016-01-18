@@ -109,51 +109,54 @@ public class MainActivity extends AppCompatActivity {
 
     public void getFlowerState() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        int score = sp.getInt("@string/healthy_score", 100);
-//        int cons = sp.getInt("@string/healthy_consequence", 0);
-        boolean hasClover2 = sp.getBoolean("@string/clover2", false);
-        boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
-        boolean hasClover = sp.getBoolean("@string/clover", false);
-        boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
-        boolean hasButterfly = sp.getBoolean("@string/clover2", false);
-        boolean hasLeaf = sp.getBoolean("@string/leaf", false);
-        boolean hasPot = sp.getBoolean("@string/pot", false);
-
-        ImageView flower = (ImageView) findViewById(R.id.flower);
-
-        if (score > 60) {
-            if (hasClover2) {
-                flower.setImageResource(R.drawable.happy_u_l_b_t_c_a_y);
-            } else if (hasButterfly2) {
-                flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
-            } else if (hasClover) {
-                flower.setImageResource(R.drawable.happy_u_l_b_t_c);
-            } else if (hasLadybug) {
-                flower.setImageResource(R.drawable.happy_u_l_b_t);
-            } else if (hasButterfly) {
-                flower.setImageResource(R.drawable.happy_u_l_b);
-            } else if (hasLeaf) {
-                flower.setImageResource(R.drawable.happy_u_l);
-            } else if (hasPot) {
-                flower.setImageResource(R.drawable.happy_u);
-            } else {
-                flower.setImageResource(R.drawable.happy);
-            }
-        } else if (score > 30) {
-            if (hasButterfly) {
-                flower.setImageResource(R.drawable.nogood_u_l_b);
-            } else if (hasLeaf) {
-                flower.setImageResource(R.drawable.nogood_u_l);
-            } else if (hasPot) {
-                flower.setImageResource(R.drawable.nogood_u);
-            } else {
-                flower.setImageResource(R.drawable.nogood);
-            }
+        int score = sp.getInt("@string/healthy_score", -1);
+        if (score < 0) {
+            Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
         } else {
-            if (hasPot) {
-                flower.setImageResource(R.drawable.bad_u);
+            boolean hasClover2 = sp.getBoolean("@string/clover2", false);
+            boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
+            boolean hasClover = sp.getBoolean("@string/clover", false);
+            boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
+            boolean hasButterfly = sp.getBoolean("@string/clover2", false);
+            boolean hasLeaf = sp.getBoolean("@string/leaf", false);
+            boolean hasPot = sp.getBoolean("@string/pot", false);
+
+            ImageView flower = (ImageView) findViewById(R.id.flower);
+
+            if (score > 60) {
+                if (hasClover2) {
+                    flower.setImageResource(R.drawable.happy_u_l_b_t_c_a_y);
+                } else if (hasButterfly2) {
+                    flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
+                } else if (hasClover) {
+                    flower.setImageResource(R.drawable.happy_u_l_b_t_c);
+                } else if (hasLadybug) {
+                    flower.setImageResource(R.drawable.happy_u_l_b_t);
+                } else if (hasButterfly) {
+                    flower.setImageResource(R.drawable.happy_u_l_b);
+                } else if (hasLeaf) {
+                    flower.setImageResource(R.drawable.happy_u_l);
+                } else if (hasPot) {
+                    flower.setImageResource(R.drawable.happy_u);
+                } else {
+                    flower.setImageResource(R.drawable.happy);
+                }
+            } else if (score > 30) {
+                if (hasButterfly) {
+                    flower.setImageResource(R.drawable.nogood_u_l_b);
+                } else if (hasLeaf) {
+                    flower.setImageResource(R.drawable.nogood_u_l);
+                } else if (hasPot) {
+                    flower.setImageResource(R.drawable.nogood_u);
+                } else {
+                    flower.setImageResource(R.drawable.nogood);
+                }
             } else {
-                flower.setImageResource(R.drawable.bad);
+                if (hasPot) {
+                    flower.setImageResource(R.drawable.bad_u);
+                } else {
+                    flower.setImageResource(R.drawable.bad);
+                }
             }
         }
     }
