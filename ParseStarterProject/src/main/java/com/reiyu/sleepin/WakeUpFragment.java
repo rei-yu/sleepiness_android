@@ -99,6 +99,8 @@ public class WakeUpFragment extends AppCompatActivity {
     private void wakeUp(String date) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putString("@string/record_updated", date).commit();
+        sp.edit().putInt("@string/healthy_score", 100).commit();
+
         Toast.makeText(WakeUpFragment.this, "Sleep Record is successfully saved.", Toast.LENGTH_SHORT);
 
         startActivity(new Intent(WakeUpFragment.this, MainActivity.class));
