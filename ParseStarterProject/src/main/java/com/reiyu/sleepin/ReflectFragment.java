@@ -270,6 +270,6 @@ public class ReflectFragment extends AppCompatActivity {
         } else if (score > 100) {
             score = 100;
         }
-        sp.edit().putInt("@string/healthy_score", score);
+        sp.edit().putInt("@string/healthy_score", score).commit();
     }
 }
