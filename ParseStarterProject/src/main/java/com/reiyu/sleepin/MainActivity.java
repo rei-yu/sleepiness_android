@@ -7,17 +7,25 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -69,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                getFlowerState();
+                getGroup();
             }
         }
     }
@@ -107,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, SignInFragment.class));
     }
 
-    public void getFlowerState() {
+    public void getFlowerState(ImageView flower) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         int score = sp.getInt("@string/healthy_score", -1);
         if (score < 0) {
@@ -120,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
             boolean hasButterfly = sp.getBoolean("@string/clover2", false);
             boolean hasLeaf = sp.getBoolean("@string/leaf", false);
             boolean hasPot = sp.getBoolean("@string/pot", false);
-
-            ImageView flower = (ImageView) findViewById(R.id.flower);
 
             if (score > 60) {
                 if (hasClover2) {
@@ -159,5 +165,58 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void getGroupFlower(int n, ArrayList<String> usernameList) {
+        switch (n) {
+            case 5:
+                final ImageView flower4 = (ImageView) findViewById(R.id.flower4);
+                getFlowerState(flower4);
+                ViewGroup.LayoutParams params = flower4.getLayoutParams();
+
+                //  横幅のみ画面サイズに変更
+                params.width = disp.getWidth();
+            case 4:
+                getFlowerState((ImageView) findViewById(R.id.flower3));
+            case 3:
+                getFlowerState((ImageView) findViewById(R.id.flower2));
+            case 2:
+                getFlowerState((ImageView) findViewById(R.id.flower1));
+            case 1:
+                getFlowerState((ImageView) findViewById(R.id.flower));
+                break;
+            default:
+                Log.e("getGroupFlower", "invalid group_id");
+                break;
+        }
+    }
+
+    private void getGroup() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        int group_id = sp.getInt("@string/group_id", -1);
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("group_id", group_id);
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> memberList, ParseException e) {
+                if (e == null) {
+                    Log.e("getGroup-findIn", memberList.toString());
+                    Log.e("getGroup-findIn size", String.valueOf(memberList.size()));
+                    if (memberList.size() > 0) {
+                        ArrayList<String> usernameList = new ArrayList<>();
+                        for (ParseUser member : memberList) {
+                            usernameList.add(member.getString("username"));
+                            Log.e("getMember", member.getString("username"));
+                        }
+                        getGroupFlower(memberList.size(), usernameList);
+                    } else {
+                        Log.e("getGroup Null", "invalid group_id : " + memberList.toString());
+                    }
+                } else {
+                    Log.e("getGroup", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 }
