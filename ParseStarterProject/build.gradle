@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.parse'
 apply plugin: 'android'
+apply plugin: 'deploygate'
 
 buildscript {
     repositories {
@@ -10,6 +11,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.parse.tools:gradle:1.+'
+        classpath 'com.deploygate:gradle:1.0.2'
     }
 }
 
