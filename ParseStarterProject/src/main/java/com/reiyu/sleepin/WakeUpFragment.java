@@ -14,10 +14,15 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Satomi on 1/3/16.
@@ -46,9 +51,6 @@ public class WakeUpFragment extends AppCompatActivity {
         TimePicker tp2 = (TimePicker) findViewById(R.id.wake_up);
         tp2.setIs24HourView(true);
 
-        EditText memoText = (EditText) findViewById(R.id.memo);
-
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +69,7 @@ public class WakeUpFragment extends AppCompatActivity {
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
                 String username = sp.getString("@string/username", null);
+
 
                 if (username != null) {
                     ParseObject testObject = new ParseObject("SleepRecord");
@@ -126,5 +129,89 @@ public class WakeUpFragment extends AppCompatActivity {
         sp.edit().putString("@string/username", null).commit();
         sp.edit().putString("@string/email", null).commit();
         startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
+    }
+
+    private void getAveScore() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        String yesterday = year + "/" + (month + 1) + "/" + day;
+
+        query.whereEqualTo("username", sp.getString("@string/username", null));
+        query.whereEqualTo("date", yesterday);
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> scoreList, ParseException e) {
+                if (e == null) {
+                    if (scoreList.size() > 0) {
+                        int sum = 0;
+                        for (ParseObject score : scoreList) {
+                            sum += score.getInt("score");
+                        }
+                        int ave = sum / scoreList.size();
+                        storeAveScore(ave);
+                    } else {
+                        Log.e("Average Score", "data was empty");
+                    }
+                } else {
+                    Log.d("Average Score", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void storeAveScore(int ave) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+        int count = sp.getInt("@string/count", 0);
+        int count_neg = sp.getInt("@string/count_neg", 0);
+
+        if (ave > 60) {
+            count_neg = 0;
+            count += 1;
+        } else if (ave > 30) {
+            count = 0;
+            count_neg += 1;
+        } else {
+            count = 0;
+            count_neg += 2;
+        }
+        updateFlower(count, count_neg);
+        sp.edit().putInt("@string/count", count).commit();
+        sp.edit().putInt("@string/count_neg", count_neg).commit();
+    }
+
+    private void updateFlower(int count, int count_neg) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+
+        boolean hasClover2 = sp.getBoolean("@string/clover2", false);
+        boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
+        boolean hasClover = sp.getBoolean("@string/clover", false);
+        boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
+        boolean hasButterfly = sp.getBoolean("@string/clover2", false);
+        boolean hasLeaf = sp.getBoolean("@string/leaf", false);
+        boolean hasPot = sp.getBoolean("@string/pot", false);
+
+        if (hasClover2) {
+
+        } else if (hasButterfly2) {
+            flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
+        } else if (hasClover) {
+            flower.setImageResource(R.drawable.happy_u_l_b_t_c);
+        } else if (hasLadybug) {
+            flower.setImageResource(R.drawable.happy_u_l_b_t);
+        } else if (hasButterfly) {
+            flower.setImageResource(R.drawable.happy_u_l_b);
+        } else if (hasLeaf) {
+            flower.setImageResource(R.drawable.happy_u_l);
+        } else if (hasPot) {
+            flower.setImageResource(R.drawable.happy_u);
+        } else {
+            flower.setImageResource(R.drawable.happy);
+        }
     }
 }
