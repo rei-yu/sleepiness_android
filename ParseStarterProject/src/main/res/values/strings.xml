@@ -23,6 +23,7 @@
     <string name="healthy_score">HEALTHY_SCORE</string>
     <string name="count">COUNT</string>
     <string name="count_neg">COUNT_NEG</string>
+    <string name="until_next">UNTIL_NEXT</string>
 
     <!-- sign in -->
     <string name="hint_name">Username</string>

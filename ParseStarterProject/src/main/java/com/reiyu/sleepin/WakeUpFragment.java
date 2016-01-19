@@ -258,5 +258,6 @@ public class WakeUpFragment extends AppCompatActivity {
                 untilNext = 2 - count;
             }
         }
+        sp.edit().putInt("@string/until_next", untilNext);
     }
 }
