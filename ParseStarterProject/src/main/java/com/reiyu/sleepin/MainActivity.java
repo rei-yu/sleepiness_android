@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
             boolean hasClover = sp.getBoolean("@string/clover", false);
             boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
-            boolean hasButterfly = sp.getBoolean("@string/clover2", false);
+            boolean hasButterfly = sp.getBoolean("@string/butterfly", false);
             boolean hasLeaf = sp.getBoolean("@string/leaf", false);
             boolean hasPot = sp.getBoolean("@string/pot", false);
 

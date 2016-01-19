@@ -70,7 +70,6 @@ public class WakeUpFragment extends AppCompatActivity {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
                 String username = sp.getString("@string/username", null);
 
-
                 if (username != null) {
                     ParseObject testObject = new ParseObject("SleepRecord");
                     testObject.put("date", date);
@@ -168,50 +167,96 @@ public class WakeUpFragment extends AppCompatActivity {
     private void storeAveScore(int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
         int count = sp.getInt("@string/count", 0);
-        int count_neg = sp.getInt("@string/count_neg", 0);
 
         if (ave > 60) {
-            count_neg = 0;
             count += 1;
-        } else if (ave > 30) {
-            count = 0;
-            count_neg += 1;
-        } else {
-            count = 0;
-            count_neg += 2;
+        } else if (ave <= 30) {
+            count -= 1;
         }
-        updateFlower(count, count_neg);
+        updateFlower(count);
         sp.edit().putInt("@string/count", count).commit();
-        sp.edit().putInt("@string/count_neg", count_neg).commit();
     }
 
-    private void updateFlower(int count, int count_neg) {
+    private void updateFlower(int count) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
 
         boolean hasClover2 = sp.getBoolean("@string/clover2", false);
         boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
         boolean hasClover = sp.getBoolean("@string/clover", false);
         boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
-        boolean hasButterfly = sp.getBoolean("@string/clover2", false);
+        boolean hasButterfly = sp.getBoolean("@string/butterfly", false);
         boolean hasLeaf = sp.getBoolean("@string/leaf", false);
         boolean hasPot = sp.getBoolean("@string/pot", false);
 
-        if (hasClover2) {
+        int untilNext = -1;
 
+        if (hasClover2) {
+            if (count < 15) {
+                sp.edit().putBoolean("@string/clover2", false);
+                untilNext = 15 - count;
+            } else {
+                count = 15;
+                untilNext = -1;
+            }
         } else if (hasButterfly2) {
-            flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
+            if (count < 11) {
+                sp.edit().putBoolean("@string/butterfly2", false);
+                untilNext = 11 - count;
+            } else if (count == 15) {
+                sp.edit().putBoolean("@string/clover2", true);
+                untilNext = -1;
+            } else {
+                untilNext = 15 - count;
+            }
         } else if (hasClover) {
-            flower.setImageResource(R.drawable.happy_u_l_b_t_c);
+            if (count < 8) {
+                sp.edit().putBoolean("@string/clover", false);
+                untilNext = 8 - count;
+            } else if (count == 11) {
+                sp.edit().putBoolean("@string/butterfly2", true);
+                untilNext = 15 - count;
+            } else {
+                untilNext = 11 - count;
+            }
         } else if (hasLadybug) {
-            flower.setImageResource(R.drawable.happy_u_l_b_t);
+            if (count < 5) {
+                sp.edit().putBoolean("@string/ladybug", false);
+                untilNext = 5 - count;
+            } else if (count == 8) {
+                sp.edit().putBoolean("@string/clover", true);
+                untilNext = 11 - count;
+            } else {
+                untilNext = 8 - count;
+            }
         } else if (hasButterfly) {
-            flower.setImageResource(R.drawable.happy_u_l_b);
+            if (count < 3) {
+                sp.edit().putBoolean("@string/butterfly", false);
+                untilNext = 3 - count;
+            } else if (count == 5) {
+                sp.edit().putBoolean("@string/ladybug", true);
+                untilNext = 8 - count;
+            } else {
+                untilNext = 5 - count;
+            }
         } else if (hasLeaf) {
-            flower.setImageResource(R.drawable.happy_u_l);
+            if (count < 2) {
+                sp.edit().putBoolean("@string/leaf", false);
+                untilNext = 2 - count;
+            } else if (count == 3) {
+                sp.edit().putBoolean("@string/butterfly", true);
+                untilNext = 5 - count;
+            } else {
+                untilNext = 3 - count;
+            }
         } else if (hasPot) {
-            flower.setImageResource(R.drawable.happy_u);
-        } else {
-            flower.setImageResource(R.drawable.happy);
+            if (count < 1) {
+                sp.edit().putBoolean("@string/pot", false);
+            } else if (count == 2) {
+                sp.edit().putBoolean("@string/leaf", true);
+                untilNext = 3 - count;
+            } else {
+                untilNext = 2 - count;
+            }
         }
     }
 }
