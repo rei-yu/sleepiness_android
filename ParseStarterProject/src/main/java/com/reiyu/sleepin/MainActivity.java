@@ -7,14 +7,11 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -56,9 +53,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 setContentView(R.layout.activity_main);
 
-                TextView textView = (TextView) findViewById(R.id.welcome_message);
                 String msg = sp.getString("@string/username", null) + "'s Flower";
-                textView.setText(msg);
+                setTitle(msg);
 
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
                 fab.setOnClickListener(new View.OnClickListener() {
@@ -174,8 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 getFlowerState(flower4);
                 ViewGroup.LayoutParams params = flower4.getLayoutParams();
 
-                //  横幅のみ画面サイズに変更
-                params.width = disp.getWidth();
             case 4:
                 getFlowerState((ImageView) findViewById(R.id.flower3));
             case 3:
