@@ -54,6 +54,8 @@ public class WakeUpFragment extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getAveScore();
+
                 TimePicker tp1 = (TimePicker) findViewById(R.id.go_to_bed);
                 int hour = tp1.getCurrentHour();
                 int minute = tp1.getCurrentMinute();
@@ -154,6 +156,7 @@ public class WakeUpFragment extends AppCompatActivity {
                         }
                         int ave = sum / scoreList.size();
                         storeAveScore(ave);
+                        Log.e("Average Score", String.valueOf(ave));
                     } else {
                         Log.e("Average Score", "data was empty");
                     }
@@ -259,5 +262,26 @@ public class WakeUpFragment extends AppCompatActivity {
             }
         }
         sp.edit().putInt("@string/until_next", untilNext);
+
+        ParseObject testObject = new ParseObject("FlowerRecord");
+        testObject.put("username", sp.getString("@string/username", null));
+        testObject.put("date", date);
+        testObject.put("clover2", hasClover2);
+        testObject.put("butterfly2", hasButterfly2);
+        testObject.put("clover", hasClover);
+        testObject.put("ladybug", hasLadybug);
+        testObject.put("butterfly", hasButterfly);
+        testObject.put("leaf", hasLeaf);
+        testObject.put("pot", hasPot);
+
+        testObject.saveInBackground(new SaveCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.e("Flower Record", "Successfully saved");
+                } else {
+                    Log.e("Flower Record", "Error", e);
+                }
+            }
+        });
     }
 }
