@@ -17,7 +17,5 @@ public class SessionService extends WakefulIntentService {
     @Override
     protected void doWakefulWork(Intent intent) {
         Log.e("dowakefulWork", "running");
-
-        SessionReceiver.scheduleAlarms(this);
     }
 }

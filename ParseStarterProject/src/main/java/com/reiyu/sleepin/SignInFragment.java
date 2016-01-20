@@ -10,10 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.List;
 
 /**
  * Created by Satomi on 1/3/16.
@@ -83,6 +87,7 @@ public class SignInFragment extends AppCompatActivity {
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
                             signIn();
+                            getGroupID();
                         } else {
                             Log.e(TAG, "Error Sign in");
                         }
@@ -103,5 +108,39 @@ public class SignInFragment extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         System.exit(0);
+    }
+
+    private void getGroupID() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username", sp.getString("@string/username", null));
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> memberObject, ParseException e) {
+                if (e == null) {
+                    if (memberObject.size() > 0) {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
+                        for (ParseUser member : memberObject) {
+                            String name = member.getString("username");
+                            String username = sp.getString("@string/username", null);
+                            if (name.equals(username)) {
+                                int group_id = member.getInt("group_id");
+                                if (group_id > 0) {
+                                    sp.edit().putInt("@string/group_id", group_id).commit();
+                                    Log.e("getGroupID", String.valueOf(group_id));
+                                }
+                            } else {
+                                Log.e("getGroupID", "group_id was null");
+                            }
+                        }
+                    } else {
+                        Log.e("getGroupID", "no user matches username : " + memberObject.toString());
+                    }
+                } else {
+                    Log.e("getGroupID", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 }

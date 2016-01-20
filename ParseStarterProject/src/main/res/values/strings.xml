@@ -28,6 +28,7 @@
     <string name="current_username">CURRENT_USERNAME</string>
     <string name="current_score">CURRENT_SCORE</string>
     <string name="member_set">MEMBER_SET</string>
+    <string name="ave_score">AVE_SCORE</string>
 
     <!-- sign in -->
     <string name="hint_name">Username</string>
