@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        flower_num = 0;
 
         if (!(sp.getBoolean("@string/signed_in", false))) {
             Log.e("Main Activity", "user null");
@@ -118,28 +119,28 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, SignInFragment.class));
     }
 
-    public void getFlowerState(int number, HashSet usernameSet) {
-        memberList = new ArrayList<>(usernameSet);
+    public void getFlowerState() {
+//        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+//        int score = sp.getInt("@string/healthy_score", -1);
 
-        for (int i = 0; i < number; i++) {
-            Log.e("showFlowerState", String.valueOf(i));
-            ParseQuery<ParseObject> query_score = ParseQuery.getQuery("SleepinessRecord");
-            flower_num = i;
-            current_username = memberList.get(i);
+        ParseQuery<ParseObject> query_score = ParseQuery.getQuery("SleepinessRecord");
+        if (memberList.size() > 0) {
+            current_username = memberList.get(0);
+            memberList.remove(0);
             query_score.whereEqualTo("username", current_username);
-            query_score.orderByDescending("date");
-            query_score.orderByDescending("session");
+            query_score.orderByDescending("createdAt");
 
             query_score.getFirstInBackground(new GetCallback<ParseObject>() {
                 public void done(ParseObject sleepinessRecord, ParseException e) {
-                    if (e == null) {
+                    if (sleepinessRecord != null) {
                         int score = sleepinessRecord.getInt("score");
                         current_score = score;
 
-                        Log.e("showFlower-getScore", String.valueOf(score));
+                        Log.e("FlowerRecordScore", String.valueOf(score));
+
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
                         query.whereEqualTo("username", current_username);
-                        query.orderByDescending("date");
+                        query.orderByDescending("createdAt");
 
                         query.getFirstInBackground(new GetCallback<ParseObject>() {
                             public void done(ParseObject flowerRecord, ParseException e) {
@@ -152,41 +153,46 @@ public class MainActivity extends AppCompatActivity {
                                     boolean hasLeaf = flowerRecord.getBoolean("hasLeaf");
                                     boolean hasPot = flowerRecord.getBoolean("hasPot");
 
-                                    Log.e("showFlower-access", "boolean");
+                                    Log.e("FlowerRecordState", "success");
                                     ImageView flower;
                                     switch (flower_num) {
                                         case 3:
                                             flower = (ImageView) findViewById(R.id.flower4);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            flower_num += 1;
                                             break;
                                         case 2:
                                             flower = (ImageView) findViewById(R.id.flower3);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            flower_num += 1;
                                             break;
                                         case 1:
                                             flower = (ImageView) findViewById(R.id.flower2);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            flower_num += 1;
                                             break;
                                         case 0:
                                             flower = (ImageView) findViewById(R.id.flower1);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            flower_num += 1;
                                             break;
                                     }
                                 } else {
-                                    Log.d("getFlowerRecord", "Error: " + e.getMessage());
+                                    Log.e("FlowerRecordState", "Error: " + e.getMessage());
                                 }
                             }
                         });
                     } else {
-                        Log.d("getFlowerRecord", "Error: " + e.getMessage());
+                        Log.e("FlowerRecordScore", "Error: " + e.getMessage());
                     }
+                    getFlowerState();
                 }
             });
         }
     }
 
     private void showFlower(ImageView flower, int score, Boolean hasClover2, boolean hasButterfly2, boolean hasClover, boolean hasLadybug, boolean hasButterfly, boolean hasLeaf, boolean hasPot) {
-        Log.e("showFlower", "come");
+        Log.e("showFlower", "called");
 
         if (score < 0) {
             Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
@@ -308,12 +314,12 @@ public class MainActivity extends AppCompatActivity {
         query.whereEqualTo("group_id", group_id);
 
         query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> memberList, ParseException e) {
+            public void done(List<ParseUser> memberObject, ParseException e) {
                 if (e == null) {
-                    if (memberList.size() > 0) {
+                    if (memberObject.size() > 0) {
                         HashSet<String> usernameSet = new HashSet<>();
                         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        for (ParseUser member : memberList) {
+                        for (ParseUser member : memberObject) {
                             String name = member.getString("username");
 
                             if (!name.equals(sp.getString("@string/username", null))) {
@@ -322,7 +328,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         sp.edit().putStringSet("@string/member_set", usernameSet);
-                        getFlowerState(usernameSet.size(), usernameSet);
+                        memberList = new ArrayList<>(usernameSet);
+                        getFlowerState();
                     } else {
                         Log.e("getGroup Null", "invalid group_id : " + memberList.toString());
                     }

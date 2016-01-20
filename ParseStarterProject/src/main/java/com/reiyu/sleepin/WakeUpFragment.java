@@ -262,26 +262,32 @@ public class WakeUpFragment extends AppCompatActivity {
             }
         }
         sp.edit().putInt("@string/until_next", untilNext);
+        String username = sp.getString("@string/username", null);
 
-        ParseObject testObject = new ParseObject("FlowerRecord");
-        testObject.put("username", sp.getString("@string/username", null));
-        testObject.put("date", date);
-        testObject.put("clover2", hasClover2);
-        testObject.put("butterfly2", hasButterfly2);
-        testObject.put("clover", hasClover);
-        testObject.put("ladybug", hasLadybug);
-        testObject.put("butterfly", hasButterfly);
-        testObject.put("leaf", hasLeaf);
-        testObject.put("pot", hasPot);
+        if (username != null) {
+            ParseObject testObject = new ParseObject("FlowerRecord");
+            testObject.put("username", username);
+            testObject.put("date", date);
+            testObject.put("clover2", hasClover2);
+            testObject.put("butterfly2", hasButterfly2);
+            testObject.put("clover", hasClover);
+            testObject.put("ladybug", hasLadybug);
+            testObject.put("butterfly", hasButterfly);
+            testObject.put("leaf", hasLeaf);
+            testObject.put("pot", hasPot);
 
-        testObject.saveInBackground(new SaveCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.e("Flower Record", "Successfully saved");
-                } else {
-                    Log.e("Flower Record", "Error", e);
+            testObject.saveInBackground(new SaveCallback() {
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.e("Flower Record", "Successfully saved");
+                    } else {
+                        Log.e("Flower Record", "Error", e);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            Log.e("Sleep Record", "username is null");
+            startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
+        }
     }
 }
