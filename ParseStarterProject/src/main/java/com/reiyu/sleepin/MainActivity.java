@@ -1,5 +1,7 @@
 package com.reiyu.sleepin;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(R.string.app_name);
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.e("Ave Score", String.valueOf(sp.getInt("@string/ave_score", -1)));
 
         if (!(sp.getBoolean("@string/signed_in", false))) {
             Log.e("Main Activity", "user null");

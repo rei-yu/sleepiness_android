@@ -28,35 +28,51 @@ public class SessionReceiver extends BroadcastReceiver {
     private static final int alarm7 = 7;
     private static final int alarm8 = 8;
 
-    private static final int id_back = 10;
+    private static final int alarm10 = 10;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         int alarm_id = intent.getIntExtra("@string/alarm_id", 0);
+        Intent intentNew;
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if ((alarm_id > 0) && (alarm_id < 10)) {
+            intentNew = new Intent(context, ReflectFragment.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm_id, intentNew, 0);
 
-        Intent intent_reflect = new Intent(context, ReflectFragment.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm_id, intent_reflect, 0);
+            Notification notification = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setTicker("振り返りの時間です！")
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle("振り返りの時間です！")
+                    .setContentText("タップして振り返る")
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setContentIntent(pendingIntent)
+                    .build();
 
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+            notificationManager.notify(R.string.app_name, notification);
+        } else if (alarm_id == 10) {
+            intentNew = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm_id, intentNew, 0);
 
-        Notification notification = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setTicker("振り返りの時間です！")
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle("振り返りの時間です！")
-                .setContentText("タップして振り返る")
-                        // 音、バイブレート、LEDで通知
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setContentIntent(pendingIntent)
-                .build();
+            Notification notification = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setTicker("Session開始です！")
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle("Session開始です！")
+                    .setContentText("起床記録も忘れずにつけて下さい！")
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setContentIntent(pendingIntent)
+                    .build();
 
-        notificationManager.cancelAll();
-        notificationManager.notify(R.string.app_name, notification);
-
-        if (intent.getAction() == null) {
-            WakefulIntentService.sendWakefulWork(context, SessionService.class);
+            notificationManager.cancelAll();
+            notificationManager.notify(R.string.app_name, notification);
         } else {
-            Log.e("SessionReceiver", "getAction() is not null");
+            if (intent.getAction() == null) {
+                WakefulIntentService.sendWakefulWork(context, SessionService.class);
+            } else {
+                Log.e("SessionReceiver", "getAction() is not null");
+            }
         }
     }
 
@@ -75,7 +91,6 @@ public class SessionReceiver extends BroadcastReceiver {
         cal.set(Calendar.SECOND, ran);
         cal.set(Calendar.MILLISECOND, 0);
 
-        // 過去だったら明日にする
         if (cal.getTimeInMillis() < System.currentTimeMillis()) {
             cal.add(Calendar.DAY_OF_YEAR, 1);
         }

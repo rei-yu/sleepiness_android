@@ -35,6 +35,7 @@ public class WakeUpFragment extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setAlarms();
         getGroup();
 
         setContentView(R.layout.fragment_wake_up);
@@ -178,6 +179,7 @@ public class WakeUpFragment extends AppCompatActivity {
 
     private void storeAveScore(int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+        sp.edit().putInt("@string/ave_score", ave);
         int count = sp.getInt("@string/count", 0);
 
         if (ave > 60) {
@@ -331,5 +333,17 @@ public class WakeUpFragment extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setAlarms() {
+        SessionReceiver.scheduleAlarms(this, 10, 31, 1);
+        SessionReceiver.scheduleAlarms(this, 12, 01, 2);
+        SessionReceiver.scheduleAlarms(this, 13, 31, 3);
+        SessionReceiver.scheduleAlarms(this, 15, 01, 4);
+        SessionReceiver.scheduleAlarms(this, 16, 31, 5);
+        SessionReceiver.scheduleAlarms(this, 18, 01, 6);
+        SessionReceiver.scheduleAlarms(this, 19, 31, 7);
+        SessionReceiver.scheduleAlarms(this, 21, 01, 8);
+        SessionReceiver.scheduleAlarms(this, 9, 00, 10);
     }
 }

@@ -1,5 +1,7 @@
 package com.reiyu.sleepin;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,6 +35,10 @@ public class ReflectFragment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(R.string.app_name);
+
         setContentView(R.layout.fragment_reflect);
 
         TextView textView = (TextView) findViewById(R.id.session);
