@@ -16,10 +16,18 @@
     <string name="signed_in">SIGNED_IN</string>
     <string name="username">USERNAME</string>
     <string name="email">EMAIL</string>
+    <string name="group_id">GROUP_ID</string>
     <string name="record_updated">SLEEP_RECORD_UPDATED</string>
     <string name="sleepiness_updated">SLEEPINESS_UPDATED</string>
     <string name="healthy_consequence">HEALTHY_CONSEQUENCE</string>
     <string name="healthy_score">HEALTHY_SCORE</string>
+    <string name="count">COUNT</string>
+    <string name="count_neg">COUNT_NEG</string>
+    <string name="until_next">UNTIL_NEXT</string>
+    <string name="member_number">MEMBER_NUMBER</string>
+    <string name="current_username">CURRENT_USERNAME</string>
+    <string name="current_score">CURRENT_SCORE</string>
+    <string name="member_set">MEMBER_SET</string>
 
     <!-- sign in -->
     <string name="hint_name">Username</string>
@@ -34,7 +42,7 @@
 
     <!-- reflect-->
     <string name="check_sleepiness">Were you sleepy during this session?</string>
-    <string name="sleepiness5">昼寝をした</string>
+    <string name="sleepiness5">30分以上昼寝をした</string>
     <string name="sleepiness4">座ったまま寝落ちた</string>
     <string name="sleepiness3">意識が何度か途切れた</string>
     <string name="sleepiness2">うとうとした</string>

@@ -47,7 +47,7 @@ public class ReflectFragment extends AppCompatActivity {
         getSession();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
-        String sleepiness_updated = sp.getString("@string/sleepiness_updated", "0000/00/00");
+        String sleepiness_updated = sp.getString("@string/sleepiness_updated", "0000/00/000");
 
         Button bt1 = (Button) findViewById(R.id.sleepiness1);
         bt1.setOnClickListener(new View.OnClickListener() {
