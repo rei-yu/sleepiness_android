@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -23,8 +22,6 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        flower_num = 0;
 
         if (!(sp.getBoolean("@string/signed_in", false))) {
             Log.e("Main Activity", "user null");
@@ -81,7 +77,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 showMainFlower();
-                getGroup();
+
+                if (sp.getStringSet("@string/member_set", null) != null) {
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+                            memberList = new ArrayList<>(sp.getStringSet("@string/member_set", null));
+                            flower_num = 0;
+                            getFlowerState();
+//                        }
+//                    }).start();
+
+                } else {
+                    Log.e("MainActivity onCreate", "member is null");
+                }
             }
         }
     }
@@ -120,10 +129,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getFlowerState() {
-//        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-//        int score = sp.getInt("@string/healthy_score", -1);
-
         ParseQuery<ParseObject> query_score = ParseQuery.getQuery("SleepinessRecord");
+
         if (memberList.size() > 0) {
             current_username = memberList.get(0);
             memberList.remove(0);
@@ -188,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
                     getFlowerState();
                 }
             });
+        } else {
+            Log.e("FlowerRecord", "no member");
         }
     }
 
@@ -287,39 +296,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    private void getGroup() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        int group_id = sp.getInt("@string/group_id", -1);
-
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("group_id", group_id);
-
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> memberObject, ParseException e) {
-                if (e == null) {
-                    if (memberObject.size() > 0) {
-                        HashSet<String> usernameSet = new HashSet<>();
-                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        for (ParseUser member : memberObject) {
-                            String name = member.getString("username");
-
-                            if (!name.equals(sp.getString("@string/username", null))) {
-                                usernameSet.add(name);
-                                Log.e("getMember", member.getString("username"));
-                            }
-                        }
-                        sp.edit().putStringSet("@string/member_set", usernameSet);
-                        memberList = new ArrayList<>(usernameSet);
-                        getFlowerState();
-                    } else {
-                        Log.e("getGroup Null", "invalid group_id : " + memberList.toString());
-                    }
-                } else {
-                    Log.e("getGroup", "Error: " + e.getMessage());
-                }
-            }
-        });
     }
 }

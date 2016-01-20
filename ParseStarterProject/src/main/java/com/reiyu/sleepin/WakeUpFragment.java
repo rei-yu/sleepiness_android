@@ -22,6 +22,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -33,6 +34,8 @@ public class WakeUpFragment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getGroup();
 
         setContentView(R.layout.fragment_wake_up);
         Button button = (Button) findViewById(R.id.save_record);
@@ -289,5 +292,37 @@ public class WakeUpFragment extends AppCompatActivity {
             Log.e("Sleep Record", "username is null");
             startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
         }
+    }
+
+    private void getGroup() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+        int group_id = sp.getInt("@string/group_id", -1);
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("group_id", group_id);
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> memberObject, ParseException e) {
+                if (e == null) {
+                    if (memberObject.size() > 0) {
+                        HashSet<String> usernameSet = new HashSet<>();
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+                        for (ParseUser member : memberObject) {
+                            String name = member.getString("username");
+
+                            if (!name.equals(sp.getString("@string/username", null))) {
+                                usernameSet.add(name);
+                                Log.e("getMember", member.getString("username"));
+                            }
+                        }
+                        sp.edit().putStringSet("@string/member_set", usernameSet).commit();
+                    } else {
+                        Log.e("getGroup Null", "invalid group_id : " + memberObject.toString());
+                    }
+                } else {
+                    Log.e("getGroup", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 }
