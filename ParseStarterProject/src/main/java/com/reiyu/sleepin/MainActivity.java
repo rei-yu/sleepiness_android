@@ -82,9 +82,10 @@ public class MainActivity extends AppCompatActivity {
 //                    new Thread(new Runnable() {
 //                        @Override
 //                        public void run() {
-                            memberList = new ArrayList<>(sp.getStringSet("@string/member_set", null));
-                            flower_num = 0;
-                            getFlowerState();
+                    memberList = new ArrayList<>(sp.getStringSet("@string/member_set", null));
+                    flower_num = 0;
+                    getFlowerState();
+                    Log.e("MainActivity onCreate", sp.getStringSet("@string/member_set", null).toString());
 //                        }
 //                    }).start();
 
@@ -118,6 +119,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
+    }
+
     private void signOut() {
         ParseUser.logOut();
 
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                         int score = sleepinessRecord.getInt("score");
                         current_score = score;
 
-                        Log.e("FlowerRecordScore", String.valueOf(score));
+                        Log.e("FlowerRecordScore " + current_username, String.valueOf(score));
 
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
                         query.whereEqualTo("username", current_username);
@@ -160,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                                     boolean hasLeaf = flowerRecord.getBoolean("hasLeaf");
                                     boolean hasPot = flowerRecord.getBoolean("hasPot");
 
-                                    Log.e("FlowerRecordState", "success");
+                                    Log.e("FlowerRecordState " + current_username, "success");
                                     ImageView flower;
                                     switch (flower_num) {
                                         case 3:
@@ -185,18 +191,18 @@ public class MainActivity extends AppCompatActivity {
                                             break;
                                     }
                                 } else {
-                                    Log.e("FlowerRecordState", "Error: " + e.getMessage());
+                                    Log.e("FlowerRecordState " + current_username, "Error: " + e.getMessage());
                                 }
                             }
                         });
                     } else {
-                        Log.e("FlowerRecordScore", "Error: " + e.getMessage());
+                        Log.e("FlowerRecordScore " + current_username, "Error: " + e.getMessage());
                     }
                     getFlowerState();
                 }
             });
         } else {
-            Log.e("FlowerRecord", "no member");
+            Log.e("FlowerRecord", "no more member");
         }
     }
 
