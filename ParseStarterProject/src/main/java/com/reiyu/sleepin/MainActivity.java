@@ -234,23 +234,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-//
-//    private void getGroupFlower(int n, ArrayList<String> usernameList) {
-//        switch (n - 1) {
-//            case 4:
-//                getFlowerState(4, usernameList.get(3));
-//            case 3:
-//                getFlowerState(3, usernameList.get(2));
-//            case 2:
-//                getFlowerState(2, usernameList.get(1));
-//            case 1:
-//                getFlowerState(1, usernameList.get(0));
-//            default:
-//                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-//                getFlowerState(0, sp.getString("@string/username", null));
-//                break;
-//        }
-//    }
 
     private void showMainFlower() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
