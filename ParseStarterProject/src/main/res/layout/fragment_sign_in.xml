@@ -1,95 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#fff0f5"
-              android:orientation="vertical"
-              android:padding="16dp"
-              tools:context=".SignInFragment">
+<ScrollView
+    android:id="@+id/SignInScrollView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="#fff0f5"
+                  android:orientation="vertical"
+                  android:padding="16dp"
+                  tools:context=".SignInFragment">
 
-        <EditText
-            android:id="@+id/name_sign_in"
-            android:layout_width="fill_parent"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/name_sign_in"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_name"
+                android:imeOptions="actionNext"
+                android:inputType="text"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/password_sign_in"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_pass"
+                android:imeOptions="actionDone"
+                android:inputType="text"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/sign_in"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_name"
-            android:imeOptions="actionNext"
-            android:inputType="text"/>
-    </android.support.design.widget.TextInputLayout>
+            android:layout_gravity="right"
+            android:text="Sign in"/>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/password_sign_in"
+        <View
             android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="32dp"
+            android:background="#FF0000"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/name_register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_name"
+                android:imeOptions="actionNext"
+                android:inputType="text"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/email_register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_email"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/password_register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_pass"
+                android:imeOptions="actionNext"
+                android:inputType="text"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/group_id_register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_group_id"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_pass"
-            android:imeOptions="actionDone"
-            android:inputType="text"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:id="@+id/sign_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Sign in"/>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="32dp"
-        android:background="#FF0000"/>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/name_register"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_name"
-            android:imeOptions="actionNext"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/email_register"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_email"
-            android:imeOptions="actionNext"
-            android:inputType="text"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/password_register"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_pass"
-            android:imeOptions="actionSend"
-            android:inputType="text"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:id="@+id/register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Register"/>
-</LinearLayout>
+            android:layout_gravity="right"
+            android:text="Register"/>
+    </LinearLayout>
+</ScrollView>

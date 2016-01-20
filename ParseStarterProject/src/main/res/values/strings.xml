@@ -33,6 +33,7 @@
     <string name="hint_name">Username</string>
     <string name="hint_email">Email</string>
     <string name="hint_pass">Password</string>
+    <string name="hint_group_id">Group ID</string>
 
     <!-- wake up -->
     <string name="hint_date">Date</string>

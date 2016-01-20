@@ -125,6 +125,11 @@ public class WakeUpFragment extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
+    }
+
     private void signOut() {
         ParseUser.logOut();
 
@@ -298,6 +303,7 @@ public class WakeUpFragment extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
         int group_id = sp.getInt("@string/group_id", -1);
 
+        Log.e("WakeUp getGroup id", String.valueOf(group_id));
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("group_id", group_id);
 

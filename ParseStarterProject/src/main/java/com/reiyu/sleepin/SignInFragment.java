@@ -33,17 +33,22 @@ public class SignInFragment extends AppCompatActivity {
                 EditText nameText = (EditText) findViewById(R.id.name_register);
                 EditText emailText = (EditText) findViewById(R.id.email_register);
                 EditText passText = (EditText) findViewById(R.id.password_register);
+                EditText groupIdText = (EditText) findViewById(R.id.group_id_register);
 
                 String username = nameText.getText().toString();
                 String email = emailText.getText().toString();
+                int group_id = Integer.parseInt(groupIdText.getText().toString());
+
                 ParseUser user = new ParseUser();
                 user.setUsername(username);
                 user.setEmail(email);
                 user.setPassword(passText.getText().toString());
+                user.put("group_id", group_id);
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
                 sp.edit().putString("@string/username", username).commit();
                 sp.edit().putString("@string/email", email).commit();
+                sp.edit().putInt("@string/group_id", group_id).commit();
 
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
@@ -93,5 +98,10 @@ public class SignInFragment extends AppCompatActivity {
 
         Log.d(TAG, "Successfully Sign in");
         startActivity(new Intent(SignInFragment.this, MainActivity.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
     }
 }
