@@ -85,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
                     memberList = new ArrayList<>(sp.getStringSet("@string/member_set", null));
                     flower_num = 0;
                     getFlowerState();
-                    Log.e("MainActivity onCreate", sp.getStringSet("@string/member_set", null).toString());
+                    Log.e("MainActivityGroupMember", sp.getStringSet("@string/member_set", null).toString());
 //                        }
 //                    }).start();
 
                 } else {
-                    Log.e("MainActivity onCreate", "member is null");
+                    Log.e("MainActivityGroupMember", "member is null");
                 }
             }
         }
@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putBoolean("@string/signed_in", false).commit();
         sp.edit().putString("@string/username", null).commit();
+        sp.edit().putInt("@string/group_id", -1).commit();
         sp.edit().putString("@string/email", null).commit();
         startActivity(new Intent(MainActivity.this, SignInFragment.class));
     }

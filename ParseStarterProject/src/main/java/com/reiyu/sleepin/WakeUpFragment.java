@@ -136,6 +136,7 @@ public class WakeUpFragment extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putBoolean("@string/signed_in", false).commit();
         sp.edit().putString("@string/username", null).commit();
+        sp.edit().putInt("@string/group_id", -1).commit();
         sp.edit().putString("@string/email", null).commit();
         startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
     }
