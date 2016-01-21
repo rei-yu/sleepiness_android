@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                         int score = sleepinessRecord.getInt("score");
                         current_score = score;
 
+                        Log.e("FlowerRecordScore " + current_username, "successfully get");
                         ImageView flower;
                         TextView tag;
                         switch (flower_num) {
@@ -190,10 +191,13 @@ public class MainActivity extends AppCompatActivity {
                                 tag.setText(current_username + "'s");
                                 flower_num += 1;
                                 break;
+                            default:
+                                flower_num = 0;
+                                break;
                         }
                     } else {
                         Log.e("FlowerRecordScore " + current_username, "Error: " + e.getMessage());
-                    }
+                 }
                     getFlowerScore();
                 }
             });
@@ -208,13 +212,41 @@ public class MainActivity extends AppCompatActivity {
         if (sp.getStringSet("@string/flower_state" + current_username, null) != null) {
             ArrayList<String> flowerStateList = new ArrayList<>(sp.getStringSet("@string/flower_state" + current_username, null));
             if (flowerStateList.size() == 7) {
-                boolean hasClover2 = Boolean.valueOf(flowerStateList.get(0));
-                boolean hasButterfly2 = Boolean.valueOf(flowerStateList.get(1));
-                boolean hasClover = Boolean.valueOf(flowerStateList.get(2));
-                boolean hasLadybug = Boolean.valueOf(flowerStateList.get(3));
-                boolean hasButterfly = Boolean.valueOf(flowerStateList.get(4));
-                boolean hasLeaf = Boolean.valueOf(flowerStateList.get(5));
-                boolean hasPot = Boolean.valueOf(flowerStateList.get(6));
+                boolean hasClover2 = false;
+                boolean hasButterfly2 = false;
+                boolean hasClover = false;
+                boolean hasLadybug = false;
+                boolean hasButterfly = false;
+                boolean hasLeaf = false;
+                boolean hasPot = false;
+
+                for (String setStr : flowerStateList) {
+                    String[] setAry = setStr.split(",", 0);
+
+                    switch (Integer.parseInt(setAry[0])) {
+                        case 1:
+                            hasClover2 = Boolean.getBoolean(setAry[1]);
+                            break;
+                        case 2:
+                            hasButterfly2 = Boolean.getBoolean(setAry[1]);
+                            break;
+                        case 3:
+                            hasClover = Boolean.getBoolean(setAry[1]);
+                            break;
+                        case 4:
+                            hasLadybug = Boolean.getBoolean(setAry[1]);
+                            break;
+                        case 5:
+                            hasButterfly = Boolean.getBoolean(setAry[1]);
+                            break;
+                        case 6:
+                            hasLeaf = Boolean.getBoolean(setAry[1]);
+                            break;
+                        case 7:
+                            hasPot = Boolean.getBoolean(setAry[1]);
+                            break;
+                    }
+                }
 
                 if (score < 0) {
                     Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
@@ -358,19 +390,24 @@ public class MainActivity extends AppCompatActivity {
                         boolean hasPot = flowerRecord.getBoolean("hasPot");
 
                         HashSet<String> flowerState = new HashSet<>();
-                        flowerState.add(String.valueOf(hasClover2));
-                        flowerState.add(String.valueOf(hasButterfly2));
-                        flowerState.add(String.valueOf(hasClover));
-                        flowerState.add(String.valueOf(hasLadybug));
-                        flowerState.add(String.valueOf(hasButterfly));
-                        flowerState.add(String.valueOf(hasLeaf));
-                        flowerState.add(String.valueOf(hasPot));
+                        flowerState.add("1," + String.valueOf(hasClover2));
+                        flowerState.add("2," + String.valueOf(hasButterfly2));
+                        flowerState.add("3," + String.valueOf(hasClover));
+                        flowerState.add("4," + String.valueOf(hasLadybug));
+                        flowerState.add("5," + String.valueOf(hasButterfly));
+                        flowerState.add("6," + String.valueOf(hasLeaf));
+                        flowerState.add("7," + String.valueOf(hasPot));
 
                         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                         sp.edit().putStringSet("@string/flower_state", flowerState).commit();
 
                         String name = flowerRecord.getString("username");
-                        Log.e("GroupSync " + name, "successfully get");
+                        if (flowerState.size() == 7) {
+                            Log.e("GroupSync " + name, "successfully get" + flowerState.toString());
+                        } else {
+                            Log.e("GroupSync " + name, "failed" + flowerState.toString());
+                        }
+                        getFlowerScore();
                     } else {
                         Log.e("GroupSync", "Error: " + e.getMessage());
                     }
