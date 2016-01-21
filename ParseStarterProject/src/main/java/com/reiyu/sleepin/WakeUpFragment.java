@@ -159,17 +159,22 @@ public class WakeUpFragment extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scoreList, ParseException e) {
                 if (e == null) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+                    int ave;
+
                     if (scoreList.size() > 0) {
                         int sum = 0;
                         for (ParseObject score : scoreList) {
                             sum += score.getInt("score");
                         }
-                        int ave = sum / scoreList.size();
+                        ave = sum / scoreList.size();
                         storeAveScore(ave);
                         Log.e("Average Score", String.valueOf(ave));
                     } else {
                         Log.e("Average Score", "data was empty");
+                        ave = -100;
                     }
+                    sp.edit().putInt("@string/ave_score", ave);
                 } else {
                     Log.d("Average Score", "Error: " + e.getMessage());
                 }
@@ -179,7 +184,6 @@ public class WakeUpFragment extends AppCompatActivity {
 
     private void storeAveScore(int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
-        sp.edit().putInt("@string/ave_score", ave);
         int count = sp.getInt("@string/count", 0);
 
         if (ave > 60) {
@@ -210,7 +214,7 @@ public class WakeUpFragment extends AppCompatActivity {
                 untilNext = 15 - count;
             } else {
                 count = 15;
-                untilNext = -1;
+                untilNext = 0;
             }
         } else if (hasButterfly2) {
             if (count < 11) {
@@ -265,6 +269,7 @@ public class WakeUpFragment extends AppCompatActivity {
         } else if (hasPot) {
             if (count < 1) {
                 sp.edit().putBoolean("@string/pot", false);
+                untilNext = 2 - count;
             } else if (count == 2) {
                 sp.edit().putBoolean("@string/leaf", true);
                 untilNext = 3 - count;
@@ -272,8 +277,11 @@ public class WakeUpFragment extends AppCompatActivity {
                 untilNext = 2 - count;
             }
         }
-        sp.edit().putInt("@string/until_next", untilNext);
+        sp.edit().putInt("@string/until_next", untilNext).commit();
         String username = sp.getString("@string/username", null);
+
+        Log.d("storeAve until", String.valueOf(untilNext));
+        Log.d("storeAve count", String.valueOf(count));
 
         if (username != null) {
             ParseObject testObject = new ParseObject("FlowerRecord");

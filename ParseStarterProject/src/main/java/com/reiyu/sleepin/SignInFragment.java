@@ -17,6 +17,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -59,6 +60,7 @@ public class SignInFragment extends AppCompatActivity {
                         if (e == null) {
                             Log.e(TAG, "Success");
                             signIn();
+                            getGroup();
                         } else {
                             Log.e(TAG, "Error", e);
                         }
@@ -129,6 +131,7 @@ public class SignInFragment extends AppCompatActivity {
                                 if (group_id > 0) {
                                     sp.edit().putInt("@string/group_id", group_id).commit();
                                     Log.e("getGroupID", String.valueOf(group_id));
+                                    getGroup();
                                 }
                             } else {
                                 Log.e("getGroupID", "group_id was null");
@@ -139,6 +142,39 @@ public class SignInFragment extends AppCompatActivity {
                     }
                 } else {
                     Log.e("getGroupID", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void getGroup() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
+        int group_id = sp.getInt("@string/group_id", -1);
+
+        Log.e("WakeUp getGroup id", String.valueOf(group_id));
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("group_id", group_id);
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> memberObject, ParseException e) {
+                if (e == null) {
+                    if (memberObject.size() > 0) {
+                        HashSet<String> usernameSet = new HashSet<>();
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
+                        for (ParseUser member : memberObject) {
+                            String name = member.getString("username");
+
+                            if (!name.equals(sp.getString("@string/username", null))) {
+                                usernameSet.add(name);
+                                Log.e("getMember", member.getString("username"));
+                            }
+                        }
+                        sp.edit().putStringSet("@string/member_set", usernameSet).commit();
+                    } else {
+                        Log.e("getGroup Null", "invalid group_id : " + memberObject.toString());
+                    }
+                } else {
+                    Log.e("getGroup", "Error: " + e.getMessage());
                 }
             }
         });

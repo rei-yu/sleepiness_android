@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.GetCallback;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         mNotificationManager.cancel(R.string.app_name);
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.e("Ave Score", String.valueOf(sp.getInt("@string/ave_score", -1)));
 
         if (!(sp.getBoolean("@string/signed_in", false))) {
             Log.e("Main Activity", "user null");
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 showMainFlower();
+                showDetail();
 
                 if (sp.getStringSet("@string/member_set", null) != null) {
 //                    new Thread(new Runnable() {
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             current_username = memberList.get(0);
             memberList.remove(0);
             query_score.whereEqualTo("username", current_username);
-            query_score.orderByDescending("createdAt");
+            query_score.orderByAscending("createdAt");
 
             query_score.getFirstInBackground(new GetCallback<ParseObject>() {
                 public void done(ParseObject sleepinessRecord, ParseException e) {
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
                         query.whereEqualTo("username", current_username);
-                        query.orderByDescending("createdAt");
+                        query.orderByAscending("createdAt");
 
                         query.getFirstInBackground(new GetCallback<ParseObject>() {
                             public void done(ParseObject flowerRecord, ParseException e) {
@@ -175,37 +176,46 @@ public class MainActivity extends AppCompatActivity {
 
                                     Log.e("FlowerRecordState " + current_username, "success");
                                     ImageView flower;
+                                    TextView tag;
                                     switch (flower_num) {
                                         case 3:
                                             flower = (ImageView) findViewById(R.id.flower4);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            tag = (TextView) findViewById(R.id.flower4text);
+                                            tag.setText(current_username + "'s");
                                             flower_num += 1;
                                             break;
                                         case 2:
                                             flower = (ImageView) findViewById(R.id.flower3);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            tag = (TextView) findViewById(R.id.flower3text);
+                                            tag.setText(current_username + "'s");
                                             flower_num += 1;
                                             break;
                                         case 1:
                                             flower = (ImageView) findViewById(R.id.flower2);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            tag = (TextView) findViewById(R.id.flower2text);
+                                            tag.setText(current_username + "'s");
                                             flower_num += 1;
                                             break;
                                         case 0:
                                             flower = (ImageView) findViewById(R.id.flower1);
                                             showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
+                                            tag = (TextView) findViewById(R.id.flower1text);
+                                            tag.setText(current_username + "'s");
                                             flower_num += 1;
                                             break;
                                     }
                                 } else {
                                     Log.e("FlowerRecordState " + current_username, "Error: " + e.getMessage());
                                 }
+                                getFlowerState();
                             }
                         });
                     } else {
                         Log.e("FlowerRecordScore " + current_username, "Error: " + e.getMessage());
                     }
-                    getFlowerState();
                 }
             });
         } else {
@@ -308,6 +318,28 @@ public class MainActivity extends AppCompatActivity {
                     flower.setImageResource(R.drawable.bad);
                 }
             }
+        }
+    }
+
+    private void showDetail() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        Log.e("Ave Score", String.valueOf(sp.getInt("@string/ave_score", -1)));
+        int score = sp.getInt("@string/healthy_score", -100);
+        int until_next = sp.getInt("@string/until_next", 1);
+        Log.e("untilNext", String.valueOf(until_next));
+
+        TextView scoreText = (TextView) findViewById(R.id.score);
+        TextView untilNextText = (TextView) findViewById(R.id.until_next);
+
+        until_next = 1;
+        if (score > -1) {
+            scoreText.setText("今のスコア\n    " + score + "点");
+        } else {
+            scoreText.setText("スコアが読み込めません");
+        }
+
+        if (until_next > -20) {
+            untilNextText.setText("報酬まで\nあと" + until_next + "日");
         }
     }
 }
