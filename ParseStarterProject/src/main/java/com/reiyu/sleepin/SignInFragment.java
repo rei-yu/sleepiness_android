@@ -54,6 +54,7 @@ public class SignInFragment extends AppCompatActivity {
                 sp.edit().putString("@string/username", username).commit();
                 sp.edit().putString("@string/email", email).commit();
                 sp.edit().putInt("@string/group_id", group_id).commit();
+                sp.edit().putInt("@string/count", 0).commit();
 
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
@@ -151,7 +152,7 @@ public class SignInFragment extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignInFragment.this);
         int group_id = sp.getInt("@string/group_id", -1);
 
-        Log.e("WakeUp getGroup id", String.valueOf(group_id));
+        Log.e("WakeUp stored group_id", String.valueOf(group_id));
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("group_id", group_id);
 
@@ -171,7 +172,7 @@ public class SignInFragment extends AppCompatActivity {
                         }
                         sp.edit().putStringSet("@string/member_set", usernameSet).commit();
                     } else {
-                        Log.e("getGroup Null", "invalid group_id : " + memberObject.toString());
+                        Log.e("getGroup", "invalid group_id : " + memberObject.toString());
                     }
                 } else {
                     Log.e("getGroup", "Error: " + e.getMessage());

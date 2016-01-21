@@ -25,6 +25,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> memberList;
     int current_score;
     String current_username;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 //                        public void run() {
                     memberList = new ArrayList<>(sp.getStringSet("@string/member_set", null));
                     flower_num = 0;
-                    getFlowerState();
+                    getFlowerScore();
                     Log.e("MainActivityGroupMember", sp.getStringSet("@string/member_set", null).toString());
 //                        }
 //                    }).start();
@@ -121,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_sign_out) {
             signOut();
             return true;
+        } else if (id == R.id.action_group_sync) {
+            groupSync();
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -142,12 +144,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, SignInFragment.class));
     }
 
-    public void getFlowerState() {
-        ParseQuery<ParseObject> query_score = ParseQuery.getQuery("SleepinessRecord");
-
+    public void getFlowerScore() {
+        Log.e("getFlowerScore", "called");
         if (memberList.size() > 0) {
             current_username = memberList.get(0);
             memberList.remove(0);
+            ParseQuery<ParseObject> query_score = ParseQuery.getQuery("SleepinessRecord");
             query_score.whereEqualTo("username", current_username);
             query_score.orderByAscending("createdAt");
 
@@ -157,112 +159,105 @@ public class MainActivity extends AppCompatActivity {
                         int score = sleepinessRecord.getInt("score");
                         current_score = score;
 
-                        Log.e("FlowerRecordScore " + current_username, String.valueOf(score));
-
-                        ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
-                        query.whereEqualTo("username", current_username);
-                        query.orderByAscending("createdAt");
-
-                        query.getFirstInBackground(new GetCallback<ParseObject>() {
-                            public void done(ParseObject flowerRecord, ParseException e) {
-                                if (e == null) {
-                                    boolean hasClover2 = flowerRecord.getBoolean("hasClover2");
-                                    boolean hasButterfly2 = flowerRecord.getBoolean("hasButterfly2");
-                                    boolean hasClover = flowerRecord.getBoolean("hasClover");
-                                    boolean hasLadybug = flowerRecord.getBoolean("hasLadybug");
-                                    boolean hasButterfly = flowerRecord.getBoolean("hasButterfly");
-                                    boolean hasLeaf = flowerRecord.getBoolean("hasLeaf");
-                                    boolean hasPot = flowerRecord.getBoolean("hasPot");
-
-                                    Log.e("FlowerRecordState " + current_username, "success");
-                                    ImageView flower;
-                                    TextView tag;
-                                    switch (flower_num) {
-                                        case 3:
-                                            flower = (ImageView) findViewById(R.id.flower4);
-                                            showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
-                                            tag = (TextView) findViewById(R.id.flower4text);
-                                            tag.setText(current_username + "'s");
-                                            flower_num += 1;
-                                            break;
-                                        case 2:
-                                            flower = (ImageView) findViewById(R.id.flower3);
-                                            showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
-                                            tag = (TextView) findViewById(R.id.flower3text);
-                                            tag.setText(current_username + "'s");
-                                            flower_num += 1;
-                                            break;
-                                        case 1:
-                                            flower = (ImageView) findViewById(R.id.flower2);
-                                            showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
-                                            tag = (TextView) findViewById(R.id.flower2text);
-                                            tag.setText(current_username + "'s");
-                                            flower_num += 1;
-                                            break;
-                                        case 0:
-                                            flower = (ImageView) findViewById(R.id.flower1);
-                                            showFlower(flower, current_score, hasClover2, hasButterfly2, hasClover, hasLadybug, hasButterfly, hasLeaf, hasPot);
-                                            tag = (TextView) findViewById(R.id.flower1text);
-                                            tag.setText(current_username + "'s");
-                                            flower_num += 1;
-                                            break;
-                                    }
-                                } else {
-                                    Log.e("FlowerRecordState " + current_username, "Error: " + e.getMessage());
-                                }
-                                getFlowerState();
-                            }
-                        });
+                        ImageView flower;
+                        TextView tag;
+                        switch (flower_num) {
+                            case 3:
+                                flower = (ImageView) findViewById(R.id.flower4);
+                                showFlower(flower, current_score);
+                                tag = (TextView) findViewById(R.id.flower4text);
+                                tag.setText(current_username + "'s");
+                                flower_num += 1;
+                                break;
+                            case 2:
+                                flower = (ImageView) findViewById(R.id.flower3);
+                                showFlower(flower, current_score);
+                                tag = (TextView) findViewById(R.id.flower3text);
+                                tag.setText(current_username + "'s");
+                                flower_num += 1;
+                                break;
+                            case 1:
+                                flower = (ImageView) findViewById(R.id.flower2);
+                                showFlower(flower, current_score);
+                                tag = (TextView) findViewById(R.id.flower2text);
+                                tag.setText(current_username + "'s");
+                                flower_num += 1;
+                                break;
+                            case 0:
+                                flower = (ImageView) findViewById(R.id.flower1);
+                                showFlower(flower, current_score);
+                                tag = (TextView) findViewById(R.id.flower1text);
+                                tag.setText(current_username + "'s");
+                                flower_num += 1;
+                                break;
+                        }
                     } else {
                         Log.e("FlowerRecordScore " + current_username, "Error: " + e.getMessage());
                     }
+                    getFlowerScore();
                 }
             });
         } else {
-            Log.e("FlowerRecord", "no more member");
+            Log.e("getFlowerScore", "no more member");
         }
     }
 
-    private void showFlower(ImageView flower, int score, Boolean hasClover2, boolean hasButterfly2, boolean hasClover, boolean hasLadybug, boolean hasButterfly, boolean hasLeaf, boolean hasPot) {
-        Log.e("showFlower", "called");
+    private void showFlower(ImageView flower, int score) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
-        if (score < 0) {
-            Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
-        } else {
-            if (score > 60) {
-                if (hasClover2) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t_c_a_y);
-                } else if (hasButterfly2) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
-                } else if (hasClover) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t_c);
-                } else if (hasLadybug) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t);
-                } else if (hasButterfly) {
-                    flower.setImageResource(R.drawable.happy_u_l_b);
-                } else if (hasLeaf) {
-                    flower.setImageResource(R.drawable.happy_u_l);
-                } else if (hasPot) {
-                    flower.setImageResource(R.drawable.happy_u);
+        if (sp.getStringSet("@string/flower_state" + current_username, null) != null) {
+            ArrayList<String> flowerStateList = new ArrayList<>(sp.getStringSet("@string/flower_state" + current_username, null));
+            if (flowerStateList.size() == 7) {
+                boolean hasClover2 = Boolean.valueOf(flowerStateList.get(0));
+                boolean hasButterfly2 = Boolean.valueOf(flowerStateList.get(1));
+                boolean hasClover = Boolean.valueOf(flowerStateList.get(2));
+                boolean hasLadybug = Boolean.valueOf(flowerStateList.get(3));
+                boolean hasButterfly = Boolean.valueOf(flowerStateList.get(4));
+                boolean hasLeaf = Boolean.valueOf(flowerStateList.get(5));
+                boolean hasPot = Boolean.valueOf(flowerStateList.get(6));
+
+                if (score < 0) {
+                    Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
                 } else {
-                    flower.setImageResource(R.drawable.happy);
-                }
-            } else if (score > 30) {
-                if (hasButterfly) {
-                    flower.setImageResource(R.drawable.nogood_u_l_b);
-                } else if (hasLeaf) {
-                    flower.setImageResource(R.drawable.nogood_u_l);
-                } else if (hasPot) {
-                    flower.setImageResource(R.drawable.nogood_u);
-                } else {
-                    flower.setImageResource(R.drawable.nogood);
+                    if (score > 60) {
+                        if (hasClover2) {
+                            flower.setImageResource(R.drawable.happy_u_l_b_t_c_a_y);
+                        } else if (hasButterfly2) {
+                            flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
+                        } else if (hasClover) {
+                            flower.setImageResource(R.drawable.happy_u_l_b_t_c);
+                        } else if (hasLadybug) {
+                            flower.setImageResource(R.drawable.happy_u_l_b_t);
+                        } else if (hasButterfly) {
+                            flower.setImageResource(R.drawable.happy_u_l_b);
+                        } else if (hasLeaf) {
+                            flower.setImageResource(R.drawable.happy_u_l);
+                        } else if (hasPot) {
+                            flower.setImageResource(R.drawable.happy_u);
+                        } else {
+                            flower.setImageResource(R.drawable.happy);
+                        }
+                    } else if (score > 30) {
+                        if (hasButterfly) {
+                            flower.setImageResource(R.drawable.nogood_u_l_b);
+                        } else if (hasLeaf) {
+                            flower.setImageResource(R.drawable.nogood_u_l);
+                        } else if (hasPot) {
+                            flower.setImageResource(R.drawable.nogood_u);
+                        } else {
+                            flower.setImageResource(R.drawable.nogood);
+                        }
+                    } else {
+                        if (hasPot) {
+                            flower.setImageResource(R.drawable.bad_u);
+                        } else {
+                            flower.setImageResource(R.drawable.bad);
+                        }
+                    }
                 }
             } else {
-                if (hasPot) {
-                    flower.setImageResource(R.drawable.bad_u);
-                } else {
-                    flower.setImageResource(R.drawable.bad);
-                }
+                Toast.makeText(MainActivity.this, "Please Sync Again", Toast.LENGTH_SHORT).show();
+                Log.e("showFlower", "state not enough");
             }
         }
     }
@@ -325,13 +320,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         Log.e("Ave Score", String.valueOf(sp.getInt("@string/ave_score", -1)));
         int score = sp.getInt("@string/healthy_score", -100);
-        int until_next = sp.getInt("@string/until_next", 1);
+        int until_next = sp.getInt("@string/until_next", -100);
         Log.e("untilNext", String.valueOf(until_next));
 
         TextView scoreText = (TextView) findViewById(R.id.score);
         TextView untilNextText = (TextView) findViewById(R.id.until_next);
 
-        until_next = 1;
         if (score > -1) {
             scoreText.setText("今のスコア\n    " + score + "点");
         } else {
@@ -342,4 +336,66 @@ public class MainActivity extends AppCompatActivity {
             untilNextText.setText("報酬まで\nあと" + until_next + "日");
         }
     }
+
+    private void groupSync() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        memberList = new ArrayList<>(sp.getStringSet("@string/member_set", null));
+
+        for (final String username : memberList) {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
+            query.whereEqualTo("username", username);
+            query.orderByAscending("createdAt");
+
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                public void done(ParseObject flowerRecord, ParseException e) {
+                    if (e == null) {
+                        boolean hasClover2 = flowerRecord.getBoolean("hasClover2");
+                        boolean hasButterfly2 = flowerRecord.getBoolean("hasButterfly2");
+                        boolean hasClover = flowerRecord.getBoolean("hasClover");
+                        boolean hasLadybug = flowerRecord.getBoolean("hasLadybug");
+                        boolean hasButterfly = flowerRecord.getBoolean("hasButterfly");
+                        boolean hasLeaf = flowerRecord.getBoolean("hasLeaf");
+                        boolean hasPot = flowerRecord.getBoolean("hasPot");
+
+                        HashSet<String> flowerState = new HashSet<>();
+                        flowerState.add(String.valueOf(hasClover2));
+                        flowerState.add(String.valueOf(hasButterfly2));
+                        flowerState.add(String.valueOf(hasClover));
+                        flowerState.add(String.valueOf(hasLadybug));
+                        flowerState.add(String.valueOf(hasButterfly));
+                        flowerState.add(String.valueOf(hasLeaf));
+                        flowerState.add(String.valueOf(hasPot));
+
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        sp.edit().putStringSet("@string/flower_state", flowerState).commit();
+
+                        String name = flowerRecord.getString("username");
+                        Log.e("GroupSync " + name, "successfully get");
+                    } else {
+                        Log.e("GroupSync", "Error: " + e.getMessage());
+                    }
+                }
+
+            });
+        }
+    }
+//
+//    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+//        final int height = options.outHeight;
+//        final int width = options.outWidth;
+//        int inSampleSize = 1;
+//
+//        if (height > reqHeight || width > reqWidth) {
+//
+//            final int halfHeight = height / 2;
+//            final int halfWidth = width / 2;
+//
+//            while ((halfHeight / inSampleSize) > reqHeight
+//                    && (halfWidth / inSampleSize) > reqWidth) {
+//                inSampleSize *= 2;
+//            }
+//        }
+//
+//        return inSampleSize;
+//    }
 }
