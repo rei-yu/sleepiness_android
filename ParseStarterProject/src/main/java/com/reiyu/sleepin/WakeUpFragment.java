@@ -1,7 +1,10 @@
 package com.reiyu.sleepin;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -187,12 +193,18 @@ public class WakeUpFragment extends AppCompatActivity {
     private void storeAveScore(int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
         int count = sp.getInt("@string/count", -1);
+        int isPositive;
 
         if (ave > 60) {
             count += 1;
+            isPositive = 1;
         } else if (ave <= 30) {
             count -= 1;
+            isPositive = -1;
+        } else {
+            isPositive = 0;
         }
+        showStamps(isPositive, count, ave);
         updateFlower(count);
         sp.edit().putInt("@string/count", count).commit();
     }
@@ -208,7 +220,7 @@ public class WakeUpFragment extends AppCompatActivity {
         boolean hasLeaf = sp.getBoolean("@string/leaf", false);
         boolean hasPot = sp.getBoolean("@string/pot", false);
 
-        int untilNext = -100;
+        int untilNext;
 
         if (hasClover2) {
             if (count < 14) {
@@ -389,5 +401,83 @@ public class WakeUpFragment extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void showStamps(int isPositive, int count, int ave) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("昨日の結果");
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        TextView textTitle = new TextView(this);
+        textTitle.setText("昨日の平均点は" + ave + "でした！");
+
+        TextView text1 = new TextView(this);
+        if (isPositive > 0) {
+            text1.setText("スタンプをゲットしました！おめでとう :)");
+        } else if (isPositive < 0) {
+            text1.setText("スタンプが減ってしまいました！今日は頑張ろう！");
+        } else {
+            text1.setText("今日はスタンプを貰えるように頑張ろう！");
+        }
+
+        ImageView stamp = new ImageView(this);
+        Bitmap bmp1 = null;
+        switch (count) {
+            case 1:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp1);
+                break;
+            case 2:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp2);
+                break;
+            case 3:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp3);
+                break;
+            case 4:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp4);
+                break;
+            case 5:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp5);
+                break;
+            case 6:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp6);
+                break;
+            case 7:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp7);
+                break;
+            case 8:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp8);
+                break;
+            case 9:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp9);
+                break;
+            case 10:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp10);
+                break;
+            case 11:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp11);
+                break;
+            case 12:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp12);
+                break;
+            case 13:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp13);
+                break;
+            default:
+                bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp);
+                text1.setText("毎日頑張ってスタンプをためていこう！");
+                break;
+        }
+        if (bmp1 != null) {
+            stamp.setImageBitmap(bmp1);
+            ll.addView(stamp);
+        }
+
+        ll.addView(textTitle);
+        ll.addView(text1);
+
+        alert.setView(ll);
+        alert.setPositiveButton("OK", null);
+
+        alert.show();
     }
 }
