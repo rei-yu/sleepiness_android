@@ -79,7 +79,7 @@ public class WakeUpFragment extends AppCompatActivity {
                 EditText memoText = (EditText) findViewById(R.id.memo);
                 String memo = memoText.getText().toString();
 
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String username = sp.getString("@string/username", null);
 
                 if (username != null) {
@@ -98,27 +98,27 @@ public class WakeUpFragment extends AppCompatActivity {
                                 // Sign up didn't succeed. Look at the ParseException
                                 // to figure out what went wrong
                                 Log.e("Sleep Record", "Error", e);
-                                startActivity(new Intent(WakeUpFragment.this, WakeUpFragment.class));
+                                startActivity(new Intent(getApplicationContext(), WakeUpFragment.class));
                             }
                         }
                     });
                 } else {
                     Log.e("Sleep Record", "username is null");
-                    Toast.makeText(WakeUpFragment.this, "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
-                    startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
+                    Toast.makeText(getApplicationContext(), "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
+                    startActivity(new Intent(getApplicationContext(), SignInFragment.class));
                 }
             }
         });
     }
 
     private void wakeUp(String date) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.edit().putString("@string/record_updated", date).commit();
         sp.edit().putInt("@string/healthy_score", 100).commit();
 
-        Toast.makeText(WakeUpFragment.this, "Sleep Record is successfully saved.", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "Sleep Record is successfully saved.", Toast.LENGTH_SHORT);
 
-        startActivity(new Intent(WakeUpFragment.this, MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     @Override
@@ -141,17 +141,17 @@ public class WakeUpFragment extends AppCompatActivity {
     private void signOut() {
         ParseUser.logOut();
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.edit().putBoolean("@string/signed_in", false).commit();
         sp.edit().putString("@string/username", null).commit();
         sp.edit().putInt("@string/group_id", -1).commit();
         sp.edit().putString("@string/email", null).commit();
-        startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
+        startActivity(new Intent(getApplicationContext(), SignInFragment.class));
     }
 
     private void getAveScore() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -166,7 +166,7 @@ public class WakeUpFragment extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scoreList, ParseException e) {
                 if (e == null) {
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     int ave;
 
                     if (scoreList.size() > 0) {
@@ -191,7 +191,7 @@ public class WakeUpFragment extends AppCompatActivity {
     }
 
     private void storeAveScore(int ave) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int count = sp.getInt("@string/count", 0);
         int isPositive;
 
@@ -211,7 +211,7 @@ public class WakeUpFragment extends AppCompatActivity {
     }
 
     private void updateFlower(int count) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         boolean hasClover2 = sp.getBoolean("@string/clover2", false);
         boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
@@ -225,7 +225,8 @@ public class WakeUpFragment extends AppCompatActivity {
 
         if (hasClover2) {
             if (count < 14) {
-                sp.edit().putBoolean("@string/clover2", false);
+                sp.edit().putBoolean("@string/clover2", false).commit();
+                hasClover2 = false;
                 untilNext = 14 - count;
             } else {
                 count = 14;
@@ -233,72 +234,87 @@ public class WakeUpFragment extends AppCompatActivity {
             }
         } else if (hasButterfly2) {
             if (count < 11) {
-                sp.edit().putBoolean("@string/butterfly2", false);
+                sp.edit().putBoolean("@string/butterfly2", false).commit();
+                hasButterfly2 = false;
                 untilNext = 11 - count;
             } else if (count == 15) {
-                sp.edit().putBoolean("@string/clover2", true);
+                sp.edit().putBoolean("@string/clover2", true).commit();
+                hasClover2 = true;
                 untilNext = -1;
             } else {
                 untilNext = 15 - count;
             }
         } else if (hasClover) {
             if (count < 8) {
-                sp.edit().putBoolean("@string/clover", false);
+                sp.edit().putBoolean("@string/clover", false).commit();
+                hasClover = false;
                 untilNext = 8 - count;
             } else if (count == 11) {
-                sp.edit().putBoolean("@string/butterfly2", true);
+                sp.edit().putBoolean("@string/butterfly2", true).commit();
+                hasButterfly2 = true;
                 untilNext = 15 - count;
             } else {
                 untilNext = 11 - count;
             }
         } else if (hasLadybug) {
             if (count < 5) {
-                sp.edit().putBoolean("@string/ladybug", false);
+                sp.edit().putBoolean("@string/ladybug", false).commit();
+                hasLadybug = false;
                 untilNext = 5 - count;
             } else if (count == 8) {
-                sp.edit().putBoolean("@string/clover", true);
+                sp.edit().putBoolean("@string/clover", true).commit();
+                hasClover = true;
                 untilNext = 11 - count;
             } else {
                 untilNext = 8 - count;
             }
         } else if (hasButterfly) {
             if (count < 3) {
-                sp.edit().putBoolean("@string/butterfly", false);
+                sp.edit().putBoolean("@string/butterfly", false).commit();
+                hasButterfly = false;
                 untilNext = 3 - count;
             } else if (count == 5) {
-                sp.edit().putBoolean("@string/ladybug", true);
+                sp.edit().putBoolean("@string/ladybug", true).commit();
+                hasLadybug = true;
                 untilNext = 8 - count;
             } else {
                 untilNext = 5 - count;
             }
         } else if (hasLeaf) {
             if (count < 2) {
-                sp.edit().putBoolean("@string/leaf", false);
+                sp.edit().putBoolean("@string/leaf", false).commit();
+                hasLeaf = false;
                 untilNext = 2 - count;
             } else if (count == 3) {
-                sp.edit().putBoolean("@string/butterfly", true);
+                sp.edit().putBoolean("@string/butterfly", true).commit();
+                hasButterfly = true;
                 untilNext = 5 - count;
             } else {
                 untilNext = 3 - count;
             }
         } else if (hasPot) {
             if (count < 1) {
-                sp.edit().putBoolean("@string/pot", false);
+                sp.edit().putBoolean("@string/pot", false).commit();
+                hasPot = false;
                 untilNext = 2 - count;
             } else if (count == 2) {
-                sp.edit().putBoolean("@string/leaf", true);
+                sp.edit().putBoolean("@string/leaf", true).commit();
+                hasLeaf = true;
                 untilNext = 3 - count;
             } else {
                 untilNext = 2 - count;
             }
         } else {
             if (count == 1) {
-                sp.edit().putBoolean("@string/pot", true);
+                sp.edit().putBoolean("@string/pot", true).commit();
+                hasPot = true;
                 untilNext = 2 - count;
             } else {
                 untilNext = 1 - count;
             }
         }
+
+        Log.e("FLOWER STATE", String.valueOf(hasPot));
 
         sp.edit().putInt("@string/until_next", untilNext).commit();
         String username = sp.getString("@string/username", null);
@@ -329,24 +345,24 @@ public class WakeUpFragment extends AppCompatActivity {
             });
         } else {
             Log.e("Sleep Record", "username is null");
-            startActivity(new Intent(WakeUpFragment.this, SignInFragment.class));
+            startActivity(new Intent(getApplicationContext(), SignInFragment.class));
         }
     }
 
     private void setAlarms() {
-        SessionReceiver.scheduleAlarms(this, 10, 31, 1);
-        SessionReceiver.scheduleAlarms(this, 12, 01, 2);
-        SessionReceiver.scheduleAlarms(this, 13, 31, 3);
-        SessionReceiver.scheduleAlarms(this, 15, 01, 4);
-        SessionReceiver.scheduleAlarms(this, 16, 31, 5);
-        SessionReceiver.scheduleAlarms(this, 18, 01, 6);
-        SessionReceiver.scheduleAlarms(this, 19, 31, 7);
-        SessionReceiver.scheduleAlarms(this, 21, 01, 8);
-        SessionReceiver.scheduleAlarms(this, 9, 00, 10);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 10, 31, 1);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 12, 01, 2);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 13, 31, 3);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 15, 01, 4);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 16, 31, 5);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 18, 01, 6);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 19, 31, 7);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 21, 01, 8);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 9, 00, 10);
     }
 
     private void groupSync() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (sp.getStringSet("@string/member_set", null) != null) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
@@ -357,7 +373,7 @@ public class WakeUpFragment extends AppCompatActivity {
                 @Override
                 public void done(List<ParseObject> flowerRecordList, ParseException e) {
                     if (e == null) {
-                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                         String name;
                         boolean hasClover2;
@@ -405,14 +421,14 @@ public class WakeUpFragment extends AppCompatActivity {
     }
 
     private void showStamps(int isPositive, int count, int ave) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(WakeUpFragment.this);
         String msg = "昨日の平均点は" + ave + "でした！\n";
-        LinearLayout ll = new LinearLayout(this);
+        LinearLayout ll = new LinearLayout(WakeUpFragment.this);
         ll.setOrientation(LinearLayout.VERTICAL);
-        TextView textTitle = new TextView(this);
+        TextView textTitle = new TextView(WakeUpFragment.this);
         textTitle.setText("！");
 
-        TextView text1 = new TextView(this);
+        TextView text1 = new TextView(WakeUpFragment.this);
         if (isPositive > 0) {
             msg = msg + "スタンプをゲット！";
             text1.setText("スタンプをゲットしました！おめでとう :)");
@@ -424,7 +440,7 @@ public class WakeUpFragment extends AppCompatActivity {
             text1.setText("今日はスタンプを貰えるように頑張ろう！");
         }
 
-        ImageView stamp = new ImageView(this);
+        ImageView stamp = new ImageView(WakeUpFragment.this);
         Bitmap bmp1;
         switch (count) {
             case 1:

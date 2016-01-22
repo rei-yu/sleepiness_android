@@ -52,7 +52,7 @@ public class ReflectFragment extends AppCompatActivity {
 
         getSession();
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String sleepiness_updated = sp.getString("@string/sleepiness_updated", "0000/00/000");
 
         Button bt1 = (Button) findViewById(R.id.sleepiness1);
@@ -60,7 +60,7 @@ public class ReflectFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 getSession();
 
                 query.whereEqualTo("username", sp.getString("@string/username", null));
@@ -75,11 +75,11 @@ public class ReflectFragment extends AppCompatActivity {
                                 sendSleepinessRecord(1);
                             } else {
                                 Log.e("SleepinessRecord", "already registered");
-                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                     }
                 });
@@ -90,7 +90,7 @@ public class ReflectFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 getSession();
 
                 query.whereEqualTo("username", sp.getString("@string/username", null));
@@ -105,11 +105,11 @@ public class ReflectFragment extends AppCompatActivity {
                                 sendSleepinessRecord(2);
                             } else {
                                 Log.e("SleepinessRecord", "already registered");
-                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                     }
                 });
@@ -120,7 +120,7 @@ public class ReflectFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 getSession();
 
                 query.whereEqualTo("username", sp.getString("@string/username", null));
@@ -135,11 +135,11 @@ public class ReflectFragment extends AppCompatActivity {
                                 sendSleepinessRecord(3);
                             } else {
                                 Log.e("SleepinessRecord", "already registered");
-                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                     }
                 });
@@ -150,7 +150,7 @@ public class ReflectFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 getSession();
 
                 query.whereEqualTo("username", sp.getString("@string/username", null));
@@ -165,11 +165,11 @@ public class ReflectFragment extends AppCompatActivity {
                                 sendSleepinessRecord(4);
                             } else {
                                 Log.e("SleepinessRecord", "already registered");
-                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                     }
                 });
@@ -180,7 +180,7 @@ public class ReflectFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("SleepinessRecord");
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 getSession();
 
                 query.whereEqualTo("username", sp.getString("@string/username", null));
@@ -195,11 +195,11 @@ public class ReflectFragment extends AppCompatActivity {
                                 sendSleepinessRecord(5);
                             } else {
                                 Log.e("SleepinessRecord", "already registered");
-                                startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                     }
                 });
@@ -234,7 +234,7 @@ public class ReflectFragment extends AppCompatActivity {
         sp.edit().putString("@string/username", null).commit();
         sp.edit().putInt("@string/group_id", -1).commit();
         sp.edit().putString("@string/email", null).commit();
-        startActivity(new Intent(ReflectFragment.this, SignInFragment.class));
+        startActivity(new Intent(getApplicationContext(), SignInFragment.class));
     }
 
     private void setSession(TextView textView) {
@@ -336,7 +336,7 @@ public class ReflectFragment extends AppCompatActivity {
     }
 
     private void sendSleepinessRecord(int sleepiness) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String username = sp.getString("@string/username", null);
         int score = sp.getInt("@string/healthy_score", 0);
 
@@ -367,20 +367,20 @@ public class ReflectFragment extends AppCompatActivity {
     private void finishReflection() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         sp.edit().putString("@string/sleepiness_updated", date + session_num).commit();
-        Toast.makeText(ReflectFragment.this, "Successfully Saved.", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "Successfully Saved.", Toast.LENGTH_SHORT);
 
-        startActivity(new Intent(ReflectFragment.this, MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     private void invalidUserInfo() {
         Log.e("Sleep Record", "username is null");
-        Toast.makeText(ReflectFragment.this, "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "User info was empty. Please Sign in again.", Toast.LENGTH_SHORT);
 
-        startActivity(new Intent(ReflectFragment.this, SignInFragment.class));
+        startActivity(new Intent(getApplicationContext(), SignInFragment.class));
     }
 
     private void setScore(int diff) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ReflectFragment.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int score = sp.getInt("@string/healthy_score", 0);
         score = score + diff;
         if (score < 0) {
