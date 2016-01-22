@@ -45,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(R.string.app_name);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (!(sp.getBoolean("@string/signed_in", false))) {
             Log.e("Main Activity", "user null");
-            startActivity(new Intent(MainActivity.this, SignInFragment.class));
+            startActivity(new Intent(getApplicationContext(), SignInFragment.class));
         } else {
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
@@ -61,37 +61,12 @@ public class MainActivity extends AppCompatActivity {
             if ((sp.getString("@string/record_updated", null) == null) || (!(sp.getString("@string/record_updated", null).equals(date)))) {
                 Log.e("RECORD_UPDATED", String.valueOf(date) + ":" +
                         " data not yet recorded");
-                startActivity(new Intent(MainActivity.this, WakeUpFragment.class));
+                startActivity(new Intent(getApplicationContext(), WakeUpFragment.class));
             } else {
-                setContentView(R.layout.activity_main);
-
                 String msg = sp.getString("@string/username", null) + "'s Flower";
                 setTitle(msg);
 
-                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                fab.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        String msg = ReflectFragment.getSession();
-                        int session_num = ReflectFragment.getSessionNum();
-
-                        if (session_num == 0) {
-                            Toast.makeText(MainActivity.this, "Session is 9:00 ~ 21:00\nPlease wait until 10:30 for reflection", Toast.LENGTH_LONG).show();
-                        } else if ((sp.getString("@string/sleepiness_updated", null) == null) || (!(sp.getString("@string/sleepiness_updated", null).equals(date + session_num)))) {
-                            startActivity(new Intent(MainActivity.this, ReflectFragment.class));
-                        } else {
-                            Toast.makeText(MainActivity.this, "You have already reflected\nsession " + msg + ".", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-                showMainFlower();
-                showDetail();
-
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-                getFlowerScore();
-//                    }).start();
+                setView();
             }
         }
     }
@@ -126,10 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        setContentView(R.layout.activity_main);
-        showMainFlower();
-        showDetail();
-        getFlowerScore();
+        setView();
         super.onResume();
     }
 
@@ -137,10 +109,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         if (flowerBmpSmall != null) {
             flowerBmpSmall.recycle();
+            flowerBmpSmall = null;
         }
 
         if (flowerBmpLarge != null) {
             flowerBmpLarge.recycle();
+            flowerBmpLarge = null;
         }
         super.onStop();
 //        ImageView imageView = (ImageView) findViewById(R.id.flower);
@@ -172,17 +146,18 @@ public class MainActivity extends AppCompatActivity {
     private void signOut() {
         ParseUser.logOut();
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.edit().putBoolean("@string/signed_in", false).commit();
         sp.edit().putString("@string/username", null).commit();
         sp.edit().putInt("@string/group_id", -1).commit();
         sp.edit().putString("@string/email", null).commit();
         sp.edit().putStringSet("@string/member_set", null).commit();
-        startActivity(new Intent(MainActivity.this, SignInFragment.class));
+        startActivity(new Intent(getApplicationContext(), SignInFragment.class));
     }
 
     public void getFlowerScore() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.e("getFlowerScore", "called");
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (sp.getStringSet("@string/member_set", null) != null) {
             ParseQuery<ParseObject> query_score = ParseQuery.getQuery("SleepinessRecord");
@@ -237,9 +212,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else if (e != null) {
                         Log.e("FlowerRecordScore", "Error: " + e.getMessage());
+                    } else  {
+                        Log.e("FlowerRecordScore", "e: message null" + sleepinessRecordList.size());
                     }
                 }
-
             });
         } else {
             Log.e("getFlowerScore", "no member");
@@ -247,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showFlower(ImageView flower, int score, String name) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (sp.getStringSet("@string/flower_state" + name, null) != null) {
             ArrayList<String> flowerStateList = new ArrayList<>(sp.getStringSet("@string/flower_state" + name, null));
@@ -289,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (score < 0) {
-                    Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Could not load score", Toast.LENGTH_LONG).show();
                 } else {
                     if (score > 60) {
                         if (hasClover2) {
@@ -349,18 +325,18 @@ public class MainActivity extends AppCompatActivity {
                     flower.setImageBitmap(flowerBmpSmall);
                 }
             } else {
-                Toast.makeText(MainActivity.this, "Please Sync Again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Please Sync Again", Toast.LENGTH_SHORT).show();
                 Log.e("showFlower", "state not enough");
             }
         }
     }
 
     private void showMainFlower() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int score = sp.getInt("@string/healthy_score", -1);
 
         if (score < 0) {
-            Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Could not load score", Toast.LENGTH_LONG).show();
         } else {
             boolean hasClover2 = sp.getBoolean("@string/clover2", false);
             boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
@@ -431,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDetail() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Log.e("Ave Score", String.valueOf(sp.getInt("@string/ave_score", -1)));
         int score = sp.getInt("@string/healthy_score", -100);
         int until_next = sp.getInt("@string/until_next", -100);
@@ -453,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void groupSync() {
         Log.e("groupSync", "called");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (sp.getStringSet("@string/member_set", null) != null) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
@@ -464,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void done(List<ParseObject> flowerRecordList, ParseException e) {
                     if (e == null) {
-                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                         String name;
                         boolean hasClover2;
@@ -544,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getGroup() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int group_id = sp.getInt("@string/group_id", -1);
 
         Log.e("WakeUp stored group_id", String.valueOf(group_id));
@@ -556,7 +532,7 @@ public class MainActivity extends AppCompatActivity {
                 if (e == null) {
                     if (memberObject.size() > 0) {
                         HashSet<String> usernameSet = new HashSet<>();
-                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         for (ParseUser member : memberObject) {
                             String name = member.getString("username");
 
@@ -574,5 +550,39 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setFab() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.e("FAB", "clicked");
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String msg = ReflectFragment.getSession();
+                int session_num = ReflectFragment.getSessionNum();
+
+                if (session_num == 0) {
+                    Toast.makeText(getApplicationContext(), "Session is 9:00 ~ 21:00\nPlease wait until 10:30 for reflection", Toast.LENGTH_LONG).show();
+                } else if ((sp.getString("@string/sleepiness_updated", null) == null) || (!(sp.getString("@string/sleepiness_updated", null).equals(date + session_num)))) {
+                    Log.e("FAB", "start ReflectFragment");
+                    startActivity(new Intent(getApplicationContext(), ReflectFragment.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), "You have already reflected\nsession " + msg + ".", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void setView() {
+        setContentView(R.layout.activity_main);
+        showMainFlower();
+        showDetail();
+        setFab();
+
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+        getFlowerScore();
+//                    }).start();
     }
 }
