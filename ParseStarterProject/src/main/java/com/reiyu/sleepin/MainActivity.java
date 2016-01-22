@@ -346,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
                             flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry, 350, 350);
                         }
                     }
+                    flower.setImageBitmap(flowerBmpSmall);
                 }
             } else {
                 Toast.makeText(MainActivity.this, "Please Sync Again", Toast.LENGTH_SHORT).show();

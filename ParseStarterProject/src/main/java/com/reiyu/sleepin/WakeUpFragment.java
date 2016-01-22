@@ -192,9 +192,10 @@ public class WakeUpFragment extends AppCompatActivity {
 
     private void storeAveScore(int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
-        int count = sp.getInt("@string/count", -1);
+        int count = sp.getInt("@string/count", 0);
         int isPositive;
 
+        Log.e("TEST", String.valueOf(ave));
         if (ave > 60) {
             count += 1;
             isPositive = 1;
@@ -405,23 +406,26 @@ public class WakeUpFragment extends AppCompatActivity {
 
     private void showStamps(int isPositive, int count, int ave) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("昨日の結果");
+        String msg = "昨日の平均点は" + ave + "でした！\n";
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
         TextView textTitle = new TextView(this);
-        textTitle.setText("昨日の平均点は" + ave + "でした！");
+        textTitle.setText("！");
 
         TextView text1 = new TextView(this);
         if (isPositive > 0) {
+            msg = msg + "スタンプをゲット！";
             text1.setText("スタンプをゲットしました！おめでとう :)");
         } else if (isPositive < 0) {
+            msg = msg + "スタンプが減ってしまいました！";
             text1.setText("スタンプが減ってしまいました！今日は頑張ろう！");
         } else {
+            msg = msg + "スタンプを貰えるように頑張ろう！";
             text1.setText("今日はスタンプを貰えるように頑張ろう！");
         }
 
         ImageView stamp = new ImageView(this);
-        Bitmap bmp1 = null;
+        Bitmap bmp1;
         switch (count) {
             case 1:
                 bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp1);
@@ -464,6 +468,7 @@ public class WakeUpFragment extends AppCompatActivity {
                 break;
             default:
                 bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp);
+                msg = msg + "毎日頑張ってスタンプをためよう！";
                 text1.setText("毎日頑張ってスタンプをためていこう！");
                 break;
         }
@@ -472,6 +477,7 @@ public class WakeUpFragment extends AppCompatActivity {
             ll.addView(stamp);
         }
 
+        alert.setTitle(msg);
         ll.addView(textTitle);
         ll.addView(text1);
 
