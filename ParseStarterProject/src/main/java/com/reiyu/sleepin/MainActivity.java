@@ -4,6 +4,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +34,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     String date;
+    Bitmap flowerBmpSmall;
+    Bitmap flowerBmpLarge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +117,51 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_group_sync) {
             groupSync();
             return true;
+        } else if (id == R.id.action_get_member) {
+            getGroup();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        setContentView(R.layout.activity_main);
+        showMainFlower();
+        showDetail();
+        getFlowerScore();
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        if (flowerBmpSmall != null) {
+            flowerBmpSmall.recycle();
+        }
+
+        if (flowerBmpLarge != null) {
+            flowerBmpLarge.recycle();
+        }
+        super.onStop();
+//        ImageView imageView = (ImageView) findViewById(R.id.flower);
+//        imageView.setImageDrawable(null);
+//        imageView.destroyDrawingCache();
+//
+//        ImageView imageView1 = (ImageView) findViewById(R.id.flower1);
+//        imageView1.setImageDrawable(null);
+//        imageView1.destroyDrawingCache();
+//
+//        ImageView imageView2 = (ImageView) findViewById(R.id.flower2);
+//        imageView2.setImageDrawable(null);
+//        imageView.destroyDrawingCache();
+//
+//        ImageView imageView3 = (ImageView) findViewById(R.id.flower3);
+//        imageView3.setImageDrawable(null);
+//        imageView3.destroyDrawingCache();
+//
+//        ImageView imageView4 = (ImageView) findViewById(R.id.flower4);
+//        imageView4.setImageDrawable(null);
+//        imageView4.destroyDrawingCache();
     }
 
     @Override
@@ -187,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                             }
                         }
-                    } else {
+                    } else if (e != null) {
                         Log.e("FlowerRecordScore", "Error: " + e.getMessage());
                     }
                 }
@@ -245,37 +293,57 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     if (score > 60) {
                         if (hasClover2) {
-                            flower.setImageResource(R.drawable.happy_u_l_b_t_c_a_y);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy7, 350, 350);
                         } else if (hasButterfly2) {
-                            flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy6, 350, 350);
                         } else if (hasClover) {
-                            flower.setImageResource(R.drawable.happy_u_l_b_t_c);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy5, 350, 350);
                         } else if (hasLadybug) {
-                            flower.setImageResource(R.drawable.happy_u_l_b_t);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy4, 350, 350);
                         } else if (hasButterfly) {
-                            flower.setImageResource(R.drawable.happy_u_l_b);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy3, 350, 350);
                         } else if (hasLeaf) {
-                            flower.setImageResource(R.drawable.happy_u_l);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy2, 350, 350);
                         } else if (hasPot) {
-                            flower.setImageResource(R.drawable.happy_u);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy1, 350, 350);
                         } else {
-                            flower.setImageResource(R.drawable.happy);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy, 350, 350);
                         }
                     } else if (score > 30) {
-                        if (hasButterfly) {
-                            flower.setImageResource(R.drawable.nogood_u_l_b);
+                        if (hasClover2) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad7, 350, 350);
+                        } else if (hasButterfly2) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad6, 350, 350);
+                        } else if (hasClover) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad5, 350, 350);
+                        } else if (hasLadybug) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad4, 350, 350);
+                        } else if (hasButterfly) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad3, 350, 350);
                         } else if (hasLeaf) {
-                            flower.setImageResource(R.drawable.nogood_u_l);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad2, 350, 350);
                         } else if (hasPot) {
-                            flower.setImageResource(R.drawable.nogood_u);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad1, 350, 350);
                         } else {
-                            flower.setImageResource(R.drawable.nogood);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad, 350, 350);
                         }
                     } else {
-                        if (hasPot) {
-                            flower.setImageResource(R.drawable.bad_u);
+                        if (hasClover2) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry7, 350, 350);
+                        } else if (hasButterfly2) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry6, 350, 350);
+                        } else if (hasClover) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry5, 350, 350);
+                        } else if (hasLadybug) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry4, 350, 350);
+                        } else if (hasButterfly) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry3, 350, 350);
+                        } else if (hasLeaf) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry2, 350, 350);
+                        } else if (hasPot) {
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry1, 350, 350);
                         } else {
-                            flower.setImageResource(R.drawable.bad);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry, 350, 350);
                         }
                     }
                 }
@@ -289,6 +357,7 @@ public class MainActivity extends AppCompatActivity {
     private void showMainFlower() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         int score = sp.getInt("@string/healthy_score", -1);
+
         if (score < 0) {
             Toast.makeText(MainActivity.this, "Could not load score", Toast.LENGTH_LONG).show();
         } else {
@@ -301,42 +370,62 @@ public class MainActivity extends AppCompatActivity {
             boolean hasPot = sp.getBoolean("@string/pot", false);
 
             ImageView flower = (ImageView) findViewById(R.id.flower);
-
             if (score > 60) {
                 if (hasClover2) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t_c_a_y);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy7, 1000, 1000);
                 } else if (hasButterfly2) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t_c_a);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy6, 1000, 1000);
                 } else if (hasClover) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t_c);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy5, 1000, 1000);
                 } else if (hasLadybug) {
-                    flower.setImageResource(R.drawable.happy_u_l_b_t);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy4, 1000, 1000);
                 } else if (hasButterfly) {
-                    flower.setImageResource(R.drawable.happy_u_l_b);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy3, 1000, 1000);
                 } else if (hasLeaf) {
-                    flower.setImageResource(R.drawable.happy_u_l);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy2, 1000, 1000);
                 } else if (hasPot) {
-                    flower.setImageResource(R.drawable.happy_u);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy1, 1000, 1000);
                 } else {
-                    flower.setImageResource(R.drawable.happy);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy, 1000, 1000);
                 }
             } else if (score > 30) {
-                if (hasButterfly) {
-                    flower.setImageResource(R.drawable.nogood_u_l_b);
+                if (hasClover2) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad7, 1000, 1000);
+                } else if (hasButterfly2) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad6, 1000, 1000);
+                } else if (hasClover) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad5, 1000, 1000);
+                } else if (hasLadybug) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad4, 1000, 1000);
+                } else if (hasButterfly) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad3, 1000, 1000);
                 } else if (hasLeaf) {
-                    flower.setImageResource(R.drawable.nogood_u_l);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad2, 1000, 1000);
                 } else if (hasPot) {
-                    flower.setImageResource(R.drawable.nogood_u);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad1, 1000, 1000);
                 } else {
-                    flower.setImageResource(R.drawable.nogood);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad, 1000, 1000);
                 }
             } else {
-                if (hasPot) {
-                    flower.setImageResource(R.drawable.bad_u);
+                if (hasClover2) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry7, 1000, 1000);
+                } else if (hasButterfly2) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry6, 1000, 1000);
+                } else if (hasClover) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry5, 1000, 1000);
+                } else if (hasLadybug) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry4, 1000, 1000);
+                } else if (hasButterfly) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry3, 1000, 1000);
+                } else if (hasLeaf) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry2, 1000, 1000);
+                } else if (hasPot) {
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry1, 1000, 1000);
                 } else {
-                    flower.setImageResource(R.drawable.bad);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry, 1000, 1000);
                 }
             }
+            flower.setImageBitmap(flowerBmpLarge);
         }
     }
 
@@ -362,6 +451,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void groupSync() {
+        Log.e("groupSync", "called");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
         if (sp.getStringSet("@string/member_set", null) != null) {
@@ -412,30 +502,76 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("GroupSync " + name, "failed" + flowerState.toString());
                             }
                         }
+                        getFlowerScore();
                     } else {
                         Log.e("GroupSync", "Error: " + e.getMessage());
                     }
                 }
             });
+        } else {
+            Log.e("GroupSync", "member_set is null");
         }
     }
-//
-//    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-//        final int height = options.outHeight;
-//        final int width = options.outWidth;
-//        int inSampleSize = 1;
-//
-//        if (height > reqHeight || width > reqWidth) {
-//
-//            final int halfHeight = height / 2;
-//            final int halfWidth = width / 2;
-//
-//            while ((halfHeight / inSampleSize) > reqHeight
-//                    && (halfWidth / inSampleSize) > reqWidth) {
-//                inSampleSize *= 2;
-//            }
-//        }
-//
-//        return inSampleSize;
-//    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    private void getGroup() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        int group_id = sp.getInt("@string/group_id", -1);
+
+        Log.e("WakeUp stored group_id", String.valueOf(group_id));
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("group_id", group_id);
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> memberObject, ParseException e) {
+                if (e == null) {
+                    if (memberObject.size() > 0) {
+                        HashSet<String> usernameSet = new HashSet<>();
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        for (ParseUser member : memberObject) {
+                            String name = member.getString("username");
+
+                            if (!name.equals(sp.getString("@string/username", null))) {
+                                usernameSet.add(name);
+                                Log.e("getMember", member.getString("username"));
+                            }
+                        }
+                        sp.edit().putStringSet("@string/member_set", usernameSet).commit();
+                    } else {
+                        Log.e("getGroup", "invalid group_id : " + memberObject.toString());
+                    }
+                } else {
+                    Log.e("getGroup", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
 }

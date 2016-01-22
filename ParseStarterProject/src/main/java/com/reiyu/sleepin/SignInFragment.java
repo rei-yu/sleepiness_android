@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
@@ -64,6 +65,7 @@ public class SignInFragment extends AppCompatActivity {
                             getGroup();
                         } else {
                             Log.e(TAG, "Error", e);
+                            Toast.makeText(SignInFragment.this, "Could not Register", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -93,6 +95,7 @@ public class SignInFragment extends AppCompatActivity {
                             getGroupID();
                         } else {
                             Log.e(TAG, "Error Sign in");
+                            Toast.makeText(SignInFragment.this, "Could not Sign in", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
