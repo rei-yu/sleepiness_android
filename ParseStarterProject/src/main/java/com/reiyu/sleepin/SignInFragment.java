@@ -55,7 +55,6 @@ public class SignInFragment extends AppCompatActivity {
                 sp.edit().putString("@string/username", username).commit();
                 sp.edit().putString("@string/email", email).commit();
                 sp.edit().putInt("@string/group_id", group_id).commit();
-                sp.edit().putInt("@string/count", 0).commit();
 
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {

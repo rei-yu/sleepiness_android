@@ -192,7 +192,7 @@ public class WakeUpFragment extends AppCompatActivity {
 
     private void storeAveScore(int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        int count = sp.getInt("@string/count", 0);
+        int count = sp.getInt("@string/count", -1);
         int isPositive;
 
         Log.e("TEST", String.valueOf(ave));
