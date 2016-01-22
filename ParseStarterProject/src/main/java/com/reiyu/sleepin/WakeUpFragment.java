@@ -36,7 +36,6 @@ public class WakeUpFragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setAlarms();
-        getGroup();
 
         setContentView(R.layout.fragment_wake_up);
         Button button = (Button) findViewById(R.id.save_record);
@@ -59,6 +58,7 @@ public class WakeUpFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getAveScore();
+                groupSync();
 
                 TimePicker tp1 = (TimePicker) findViewById(R.id.go_to_bed);
                 int hour = tp1.getCurrentHour();
@@ -92,6 +92,7 @@ public class WakeUpFragment extends AppCompatActivity {
                                 // Sign up didn't succeed. Look at the ParseException
                                 // to figure out what went wrong
                                 Log.e("Sleep Record", "Error", e);
+                                startActivity(new Intent(WakeUpFragment.this, WakeUpFragment.class));
                             }
                         }
                     });
@@ -319,39 +320,6 @@ public class WakeUpFragment extends AppCompatActivity {
         }
     }
 
-    private void getGroup() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
-        int group_id = sp.getInt("@string/group_id", -1);
-
-        Log.e("WakeUp getGroup id", String.valueOf(group_id));
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("group_id", group_id);
-
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> memberObject, ParseException e) {
-                if (e == null) {
-                    if (memberObject.size() > 0) {
-                        HashSet<String> usernameSet = new HashSet<>();
-                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
-                        for (ParseUser member : memberObject) {
-                            String name = member.getString("username");
-
-                            if (!name.equals(sp.getString("@string/username", null))) {
-                                usernameSet.add(name);
-                                Log.e("getMember", member.getString("username"));
-                            }
-                        }
-                        sp.edit().putStringSet("@string/member_set", usernameSet).commit();
-                    } else {
-                        Log.e("getGroup Null", "invalid group_id : " + memberObject.toString());
-                    }
-                } else {
-                    Log.e("getGroup", "Error: " + e.getMessage());
-                }
-            }
-        });
-    }
-
     private void setAlarms() {
         SessionReceiver.scheduleAlarms(this, 10, 31, 1);
         SessionReceiver.scheduleAlarms(this, 12, 01, 2);
@@ -362,5 +330,64 @@ public class WakeUpFragment extends AppCompatActivity {
         SessionReceiver.scheduleAlarms(this, 19, 31, 7);
         SessionReceiver.scheduleAlarms(this, 21, 01, 8);
         SessionReceiver.scheduleAlarms(this, 9, 00, 10);
+    }
+
+    private void groupSync() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+
+        if (sp.getStringSet("@string/member_set", null) != null) {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
+            query.whereContainedIn("username", sp.getStringSet("@string/member_set", null));
+            query.orderByAscending("createdAt");
+
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> flowerRecordList, ParseException e) {
+                    if (e == null) {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WakeUpFragment.this);
+
+                        String name;
+                        boolean hasClover2;
+                        boolean hasButterfly2;
+                        boolean hasClover;
+                        boolean hasLadybug;
+                        boolean hasButterfly;
+                        boolean hasLeaf;
+                        boolean hasPot;
+
+                        for (ParseObject flowerRecord : flowerRecordList) {
+                            hasClover2 = flowerRecord.getBoolean("hasClover2");
+                            hasButterfly2 = flowerRecord.getBoolean("hasButterfly2");
+                            hasClover = flowerRecord.getBoolean("hasClover");
+                            hasLadybug = flowerRecord.getBoolean("hasLadybug");
+                            hasButterfly = flowerRecord.getBoolean("hasButterfly");
+                            hasLeaf = flowerRecord.getBoolean("hasLeaf");
+                            hasPot = flowerRecord.getBoolean("hasPot");
+
+                            name = flowerRecord.getString("username");
+
+                            HashSet<String> flowerState = new HashSet<>();
+                            flowerState.add("1," + String.valueOf(hasClover2));
+                            flowerState.add("2," + String.valueOf(hasButterfly2));
+                            flowerState.add("3," + String.valueOf(hasClover));
+                            flowerState.add("4," + String.valueOf(hasLadybug));
+                            flowerState.add("5," + String.valueOf(hasButterfly));
+                            flowerState.add("6," + String.valueOf(hasLeaf));
+                            flowerState.add("7," + String.valueOf(hasPot));
+
+                            sp.edit().putStringSet("@string/flower_state" + name, flowerState).commit();
+
+                            if (flowerState.size() == 7) {
+                                Log.e("GroupSync " + name, "successfully get" + flowerState.toString());
+                            } else {
+                                Log.e("GroupSync " + name, "failed" + flowerState.toString());
+                            }
+                        }
+                    } else {
+                        Log.e("GroupSync", "Error: " + e.getMessage());
+                    }
+                }
+            });
+        }
     }
 }
