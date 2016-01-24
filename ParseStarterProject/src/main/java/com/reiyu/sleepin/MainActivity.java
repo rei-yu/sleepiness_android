@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
@@ -168,46 +169,54 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
                     if (e == null) {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        ArrayList<String> memberList = new ArrayList<>(sp.getStringSet("@string/member_set", null));
                         int flower_num = 0;
+
                         for (ParseObject sleepinessRecord : sleepinessRecordList) {
-                            int score = sleepinessRecord.getInt("score");
                             String name = sleepinessRecord.getString("username");
-                            Log.e("FlowerScore", "successfully get:" + sleepinessRecord.getString("username"));
-                            Log.e("FlowerScore", "score:" + score);
-                            ImageView flower;
-                            TextView tag;
-                            switch (flower_num) {
-                                case 3:
-                                    flower = (ImageView) findViewById(R.id.flower4);
-                                    showFlower(flower, score, name);
-                                    tag = (TextView) findViewById(R.id.flower4text);
-                                    tag.setText(name + "'s");
-                                    flower_num += 1;
-                                    break;
-                                case 2:
-                                    flower = (ImageView) findViewById(R.id.flower3);
-                                    showFlower(flower, score, name);
-                                    tag = (TextView) findViewById(R.id.flower3text);
-                                    tag.setText(name + "'s");
-                                    flower_num += 1;
-                                    break;
-                                case 1:
-                                    flower = (ImageView) findViewById(R.id.flower2);
-                                    showFlower(flower, score, name);
-                                    tag = (TextView) findViewById(R.id.flower2text);
-                                    tag.setText(name + "'s");
-                                    flower_num += 1;
-                                    break;
-                                case 0:
-                                    flower = (ImageView) findViewById(R.id.flower1);
-                                    showFlower(flower, score, name);
-                                    tag = (TextView) findViewById(R.id.flower1text);
-                                    tag.setText(name + "'s");
-                                    flower_num += 1;
-                                    break;
-                                default:
-                                    flower_num = 0;
-                                    break;
+                            if (memberList.indexOf(name) > 0) {
+                                int score = sleepinessRecord.getInt("score");
+                                Log.e("FlowerScore", "successfully get:" + sleepinessRecord.getString("username"));
+                                Log.e("FlowerScore", "score:" + score);
+                                ImageView flower;
+                                TextView tag;
+                                switch (flower_num) {
+                                    case 3:
+                                        memberList.remove(memberList.indexOf(name));
+                                        flower = (ImageView) findViewById(R.id.flower4);
+                                        showFlower(flower, score, name);
+                                        tag = (TextView) findViewById(R.id.flower4text);
+                                        tag.setText(name + "'s");
+                                        flower_num += 1;
+                                        break;
+                                    case 2:
+                                        memberList.remove(memberList.indexOf(name));
+                                        flower = (ImageView) findViewById(R.id.flower3);
+                                        showFlower(flower, score, name);
+                                        tag = (TextView) findViewById(R.id.flower3text);
+                                        tag.setText(name + "'s");
+                                        flower_num += 1;
+                                        break;
+                                    case 1:
+                                        memberList.remove(memberList.indexOf(name));
+                                        flower = (ImageView) findViewById(R.id.flower2);
+                                        showFlower(flower, score, name);
+                                        tag = (TextView) findViewById(R.id.flower2text);
+                                        tag.setText(name + "'s");
+                                        flower_num += 1;
+                                        break;
+                                    case 0:
+                                        memberList.remove(memberList.indexOf(name));
+                                        flower = (ImageView) findViewById(R.id.flower1);
+                                        showFlower(flower, score, name);
+                                        tag = (TextView) findViewById(R.id.flower1text);
+                                        tag.setText(name + "'s");
+                                        flower_num += 1;
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
                         Log.e("FlowerRecordScore", sleepinessRecordList.toString());
