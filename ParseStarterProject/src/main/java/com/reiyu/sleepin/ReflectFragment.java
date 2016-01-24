@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -54,6 +55,9 @@ public class ReflectFragment extends AppCompatActivity {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String sleepiness_updated = sp.getString("@string/sleepiness_updated", "0000/00/000");
+        if (sleepiness_updated.equals(date + session_num)) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
 
         Button bt1 = (Button) findViewById(R.id.sleepiness1);
         bt1.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +83,7 @@ public class ReflectFragment extends AppCompatActivity {
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), ReflectFragment.class));
                         }
                     }
                 });
@@ -109,7 +113,7 @@ public class ReflectFragment extends AppCompatActivity {
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), ReflectFragment.class));
                         }
                     }
                 });
@@ -139,7 +143,7 @@ public class ReflectFragment extends AppCompatActivity {
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), ReflectFragment.class));
                         }
                     }
                 });
@@ -169,7 +173,7 @@ public class ReflectFragment extends AppCompatActivity {
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), ReflectFragment.class));
                         }
                     }
                 });
@@ -199,7 +203,7 @@ public class ReflectFragment extends AppCompatActivity {
                             }
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), ReflectFragment.class));
                         }
                     }
                 });
@@ -342,6 +346,10 @@ public class ReflectFragment extends AppCompatActivity {
 
         if (username != null) {
             ParseObject testObject = new ParseObject("SleepinessRecord");
+            ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
+            postACL.setPublicReadAccess(true);
+            testObject.setACL(postACL);
+
             testObject.put("date", date);
             testObject.put("session", session_num);
             testObject.put("sleepiness", sleepiness);
