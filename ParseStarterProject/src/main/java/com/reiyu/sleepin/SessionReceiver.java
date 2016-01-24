@@ -37,10 +37,12 @@ public class SessionReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if ((alarm_id > 0) && (alarm_id < 10)) {
             intentNew = new Intent(context, ReflectFragment.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm_id, intentNew, 0);
+            intentNew.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm_id, intentNew, PendingIntent.FLAG_CANCEL_CURRENT);
 
             Notification notification = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.mipmap.icon)
                     .setTicker("振り返りの時間です！")
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle("振り返りの時間です！")
@@ -53,10 +55,10 @@ public class SessionReceiver extends BroadcastReceiver {
             notificationManager.notify(R.string.app_name, notification);
         } else if (alarm_id == 10) {
             intentNew = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm_id, intentNew, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentNew, 0);
 
             Notification notification = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.mipmap.icon)
                     .setTicker("Session開始です！")
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle("Session開始です！")
