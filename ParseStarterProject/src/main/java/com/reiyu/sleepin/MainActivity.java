@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             query_score.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
-                    if (sleepinessRecordList.size() > 0) {
+                    if (e == null) {
                         int flower_num = 0;
                         for (ParseObject sleepinessRecord : sleepinessRecordList) {
                             int score = sleepinessRecord.getInt("score");
@@ -210,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                             }
                         }
-                    } else if (e != null) {
+                        Log.e("FlowerRecordScore", sleepinessRecordList.toString());
+                    } else {
                         Log.e("FlowerRecordScore", "Error: " + e.getMessage());
-                    } else  {
-                        Log.e("FlowerRecordScore", "e: message null" + sleepinessRecordList.size());
+                        Toast.makeText(getApplicationContext(), "他の人のスコアが読み込めません", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -345,6 +345,8 @@ public class MainActivity extends AppCompatActivity {
             boolean hasButterfly = sp.getBoolean("@string/clover2", false);
             boolean hasLeaf = sp.getBoolean("@string/leaf", false);
             boolean hasPot = sp.getBoolean("@string/pot", false);
+
+            Log.e("showMainFlower HAS_POT", String.valueOf(hasPot));
 
             ImageView flower = (ImageView) findViewById(R.id.flower);
             if (score > 60) {
@@ -579,10 +581,11 @@ public class MainActivity extends AppCompatActivity {
         showDetail();
         setFab();
 
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-        getFlowerScore();
-//                    }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getFlowerScore();
+            }
+        }).start();
     }
 }
