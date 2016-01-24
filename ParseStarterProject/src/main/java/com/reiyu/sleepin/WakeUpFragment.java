@@ -330,6 +330,10 @@ public class WakeUpFragment extends AppCompatActivity {
 
         if (username != null) {
             ParseObject testObject = new ParseObject("FlowerRecord");
+            ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
+            postACL.setPublicReadAccess(true);
+            testObject.setACL(postACL);
+            
             testObject.put("username", username);
             testObject.put("date", date);
             testObject.put("clover2", hasClover2);
