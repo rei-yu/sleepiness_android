@@ -21,6 +21,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -84,11 +85,16 @@ public class WakeUpFragment extends AppCompatActivity {
 
                 if (username != null) {
                     ParseObject testObject = new ParseObject("SleepRecord");
+                    ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
+                    postACL.setPublicReadAccess(true);
+                    testObject.setACL(postACL);
+
                     testObject.put("date", date);
                     testObject.put("go_to_bed", go_to_bed_time);
                     testObject.put("wake_up", wake_up_time);
                     testObject.put("memo", memo);
                     testObject.put("username", username);
+
                     testObject.saveInBackground(new SaveCallback() {
                         public void done(ParseException e) {
                             if (e == null) {
@@ -324,6 +330,10 @@ public class WakeUpFragment extends AppCompatActivity {
 
         if (username != null) {
             ParseObject testObject = new ParseObject("FlowerRecord");
+            ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
+            postACL.setPublicReadAccess(true);
+            testObject.setACL(postACL);
+            
             testObject.put("username", username);
             testObject.put("date", date);
             testObject.put("clover2", hasClover2);

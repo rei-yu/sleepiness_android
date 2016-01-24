@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             query_score.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> sleepinessRecordList, ParseException e) {
-                    if (sleepinessRecordList.size() > 0) {
+                    if (e == null) {
                         int flower_num = 0;
                         for (ParseObject sleepinessRecord : sleepinessRecordList) {
                             int score = sleepinessRecord.getInt("score");
@@ -210,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                             }
                         }
-                    } else if (e != null) {
+                        Log.e("FlowerRecordScore", sleepinessRecordList.toString());
+                    } else {
                         Log.e("FlowerRecordScore", "Error: " + e.getMessage());
-                    } else  {
-                        Log.e("FlowerRecordScore", "e: message null" + sleepinessRecordList.size());
+                        Toast.makeText(getApplicationContext(), "他の人のスコアが読み込めません", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -241,25 +241,25 @@ public class MainActivity extends AppCompatActivity {
 
                     switch (Integer.parseInt(setAry[0])) {
                         case 1:
-                            hasClover2 = Boolean.getBoolean(setAry[1]);
+                            if (setAry[1].equals("true")){ hasClover2 = true; }
                             break;
                         case 2:
-                            hasButterfly2 = Boolean.getBoolean(setAry[1]);
+                            if (setAry[1].equals("true")){ hasButterfly2 = true; }
                             break;
                         case 3:
-                            hasClover = Boolean.getBoolean(setAry[1]);
+                            if (setAry[1].equals("true")){ hasClover = true; }
                             break;
                         case 4:
-                            hasLadybug = Boolean.getBoolean(setAry[1]);
+                            if (setAry[1].equals("true")){ hasLadybug = true; }
                             break;
                         case 5:
-                            hasButterfly = Boolean.getBoolean(setAry[1]);
+                            if (setAry[1].equals("true")){ hasButterfly = true; }
                             break;
                         case 6:
-                            hasLeaf = Boolean.getBoolean(setAry[1]);
+                            if (setAry[1].equals("true")){ hasLeaf = true; }
                             break;
                         case 7:
-                            hasPot = Boolean.getBoolean(setAry[1]);
+                            if (setAry[1].equals("true")){ hasPot = true; }
                             break;
                     }
                 }
@@ -345,6 +345,8 @@ public class MainActivity extends AppCompatActivity {
             boolean hasButterfly = sp.getBoolean("@string/clover2", false);
             boolean hasLeaf = sp.getBoolean("@string/leaf", false);
             boolean hasPot = sp.getBoolean("@string/pot", false);
+
+            Log.e("showMainFlower HAS_POT", String.valueOf(hasPot));
 
             ImageView flower = (ImageView) findViewById(R.id.flower);
             if (score > 60) {
@@ -452,13 +454,13 @@ public class MainActivity extends AppCompatActivity {
                         boolean hasPot;
 
                         for (ParseObject flowerRecord : flowerRecordList) {
-                            hasClover2 = flowerRecord.getBoolean("hasClover2");
-                            hasButterfly2 = flowerRecord.getBoolean("hasButterfly2");
-                            hasClover = flowerRecord.getBoolean("hasClover");
-                            hasLadybug = flowerRecord.getBoolean("hasLadybug");
-                            hasButterfly = flowerRecord.getBoolean("hasButterfly");
-                            hasLeaf = flowerRecord.getBoolean("hasLeaf");
-                            hasPot = flowerRecord.getBoolean("hasPot");
+                            hasClover2 = flowerRecord.getBoolean("clover2");
+                            hasButterfly2 = flowerRecord.getBoolean("butterfly2");
+                            hasClover = flowerRecord.getBoolean("clover");
+                            hasLadybug = flowerRecord.getBoolean("ladybug");
+                            hasButterfly = flowerRecord.getBoolean("butterfly");
+                            hasLeaf = flowerRecord.getBoolean("leaf");
+                            hasPot = flowerRecord.getBoolean("pot");
 
                             name = flowerRecord.getString("username");
 
@@ -526,6 +528,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("WakeUp stored group_id", String.valueOf(group_id));
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("group_id", group_id);
+        Log.e("getMember group_id", String.valueOf(group_id));
 
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> memberObject, ParseException e) {
@@ -579,10 +582,11 @@ public class MainActivity extends AppCompatActivity {
         showDetail();
         setFab();
 
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-        getFlowerScore();
-//                    }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getFlowerScore();
+            }
+        }).start();
     }
 }
