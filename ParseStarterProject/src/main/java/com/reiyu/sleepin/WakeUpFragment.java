@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -45,7 +46,7 @@ public class WakeUpFragment extends AppCompatActivity {
         setAlarms();
 
         setContentView(R.layout.fragment_wake_up);
-        Button button = (Button) findViewById(R.id.save_record);
+        final Button button = (Button) findViewById(R.id.save_record);
 
         DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
         int day = datePicker.getDayOfMonth();
@@ -64,6 +65,12 @@ public class WakeUpFragment extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                button.setEnabled(false);
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        button.setEnabled(true);
+                    }
+                }, 3000L);
                 getAveScore();
                 groupSync();
 
