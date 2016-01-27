@@ -205,7 +205,7 @@ public class WakeUpFragment extends AppCompatActivity {
 
     private void storeAveScore(int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        int count = sp.getInt("@string/count", -1);
+        int count = sp.getInt("@string/count", 0);
         int isPositive;
 
         Log.e("TEST", String.valueOf(ave));
@@ -218,118 +218,75 @@ public class WakeUpFragment extends AppCompatActivity {
         } else {
             isPositive = 0;
         }
+
+        if (count < 0) {
+            // countはマイナスには行かない
+            count = 0;
+        }
         showStamps(isPositive, count, ave);
-        updateFlower(count);
-        sp.edit().putInt("@string/count", count).commit();
+        updateFlower(count, ave);
     }
 
-    private void updateFlower(int count) {
+    private void updateFlower(int count, int ave) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        boolean hasClover2 = sp.getBoolean("@string/clover2", false);
-        boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
-        boolean hasClover = sp.getBoolean("@string/clover", false);
-        boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
-        boolean hasButterfly = sp.getBoolean("@string/butterfly", false);
-        boolean hasLeaf = sp.getBoolean("@string/leaf", false);
-        boolean hasPot = sp.getBoolean("@string/pot", false);
+        boolean hasClover2 = false;
+        boolean hasButterfly2 = false;
+        boolean hasClover = false;
+        boolean hasLadybug = false;
+        boolean hasButterfly = false;
+        boolean hasLeaf = false;
+        boolean hasPot = false;
 
-        int untilNext;
+        int untilNext = 0;
 
-        if (hasClover2) {
-            if (count < 14) {
-                sp.edit().putBoolean("@string/clover2", false).commit();
-                hasClover2 = false;
-                untilNext = 14 - count;
-            } else {
-                count = 14;
-                untilNext = 0;
-            }
-        } else if (hasButterfly2) {
-            if (count < 11) {
-                sp.edit().putBoolean("@string/butterfly2", false).commit();
-                hasButterfly2 = false;
-                untilNext = 11 - count;
-            } else if (count == 15) {
-                sp.edit().putBoolean("@string/clover2", true).commit();
-                hasClover2 = true;
-                untilNext = -1;
-            } else {
-                untilNext = 15 - count;
-            }
-        } else if (hasClover) {
-            if (count < 8) {
-                sp.edit().putBoolean("@string/clover", false).commit();
-                hasClover = false;
-                untilNext = 8 - count;
-            } else if (count == 11) {
-                sp.edit().putBoolean("@string/butterfly2", true).commit();
-                hasButterfly2 = true;
-                untilNext = 15 - count;
-            } else {
-                untilNext = 11 - count;
-            }
-        } else if (hasLadybug) {
-            if (count < 5) {
-                sp.edit().putBoolean("@string/ladybug", false).commit();
-                hasLadybug = false;
-                untilNext = 5 - count;
-            } else if (count == 8) {
-                sp.edit().putBoolean("@string/clover", true).commit();
-                hasClover = true;
-                untilNext = 11 - count;
-            } else {
-                untilNext = 8 - count;
-            }
-        } else if (hasButterfly) {
-            if (count < 3) {
-                sp.edit().putBoolean("@string/butterfly", false).commit();
-                hasButterfly = false;
-                untilNext = 3 - count;
-            } else if (count == 5) {
-                sp.edit().putBoolean("@string/ladybug", true).commit();
-                hasLadybug = true;
-                untilNext = 8 - count;
-            } else {
-                untilNext = 5 - count;
-            }
-        } else if (hasLeaf) {
-            if (count < 2) {
-                sp.edit().putBoolean("@string/leaf", false).commit();
-                hasLeaf = false;
-                untilNext = 2 - count;
-            } else if (count == 3) {
-                sp.edit().putBoolean("@string/butterfly", true).commit();
-                hasButterfly = true;
-                untilNext = 5 - count;
-            } else {
-                untilNext = 3 - count;
-            }
-        } else if (hasPot) {
-            if (count < 1) {
-                sp.edit().putBoolean("@string/pot", false).commit();
-                hasPot = false;
-                untilNext = 2 - count;
-            } else if (count == 2) {
-                sp.edit().putBoolean("@string/leaf", true).commit();
+        if (count >= 1) {
+            hasPot = true;
+            untilNext = 2 - count;
+
+            if (count >= 2) {
                 hasLeaf = true;
                 untilNext = 3 - count;
-            } else {
-                untilNext = 2 - count;
+
+                if (count >= 3) {
+                    hasButterfly = true;
+                    untilNext = 5 - count;
+
+                    if (count >= 5) {
+                        hasLadybug = true;
+                        untilNext = 8 - count;
+
+                        if (count >= 8) {
+                            hasClover = true;
+                            untilNext = 11 - count;
+
+                            if (count >= 11) {
+                                hasButterfly2 = true;
+                                untilNext = 14 - count;
+
+                                if (count >= 14 ) {
+                                    hasClover2 = true;
+                                    untilNext = 0;
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        } else {
-            if (count == 1) {
-                sp.edit().putBoolean("@string/pot", true).commit();
-                hasPot = true;
-                untilNext = 2 - count;
-            } else {
-                untilNext = 1 - count;
-            }
+        } else if (count == 0){
+            untilNext = 1 - count;
         }
 
-        Log.e("FLOWER STATE", String.valueOf(hasPot));
+        sp.edit().putBoolean("@string/pot", hasPot).commit();
+        sp.edit().putBoolean("@string/leaf", hasLeaf).commit();
+        sp.edit().putBoolean("@string/butterfly", hasButterfly).commit();
+        sp.edit().putBoolean("@string/ladybug", hasLadybug).commit();
+        sp.edit().putBoolean("@string/clover", hasClover).commit();
+        sp.edit().putBoolean("@string/butterfly2", hasButterfly2).commit();
+        sp.edit().putBoolean("@string/clover2", hasClover2).commit();
 
         sp.edit().putInt("@string/until_next", untilNext).commit();
+
         String username = sp.getString("@string/username", null);
 
         Log.e("storeAve untilNext", String.valueOf(untilNext));
@@ -350,6 +307,10 @@ public class WakeUpFragment extends AppCompatActivity {
             testObject.put("butterfly", hasButterfly);
             testObject.put("leaf", hasLeaf);
             testObject.put("pot", hasPot);
+            testObject.put("ave", ave);
+            testObject.put("count", count);
+
+            sp.edit().putInt("@string/count", count).commit();
 
             testObject.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
