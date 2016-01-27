@@ -9,10 +9,11 @@
     <string name="wake_up">Sleep Record</string>
     <string name="reflect">Session Reflection</string>
 
-    <string name="hello_world">Hello World!</string>
+    <!-- menu labels -->
     <string name="action_sign_out">Sign out</string>
     <string name="action_group_sync">Sync Data</string>
     <string name="action_get_member">Sync Member</string>
+    <string name="action_flower_sync">Sync My Flower</string>
 
     <!-- shared preference labels -->
     <string name="signed_in">SIGNED_IN</string>

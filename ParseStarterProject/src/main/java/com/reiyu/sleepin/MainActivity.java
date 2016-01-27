@@ -1,7 +1,9 @@
 package com.reiyu.sleepin;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e("Main Activity", "user null");
             startActivity(new Intent(getApplicationContext(), SignInFragment.class));
         } else {
+            setAlarms();
+
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
@@ -87,8 +92,19 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sign_out) {
-            signOut();
+        if (id == R.id.action_flower_sync) {
+            syncFlower();
+            return true;
+        } else if (id == R.id.action_sign_out) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Sign Out")
+                    .setMessage("Sign Out?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            signOut();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
             return true;
         } else if (id == R.id.action_group_sync) {
             groupSync();
@@ -175,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
                         for (ParseObject sleepinessRecord : sleepinessRecordList) {
                             String name = sleepinessRecord.getString("username");
-                            if (memberList.indexOf(name) > 0) {
+                            if (memberList.indexOf(name) >= 0) {
                                 int score = sleepinessRecord.getInt("score");
                                 Log.e("FlowerScore", "successfully get:" + sleepinessRecord.getString("username"));
                                 Log.e("FlowerScore", "score:" + score);
@@ -250,25 +266,39 @@ public class MainActivity extends AppCompatActivity {
 
                     switch (Integer.parseInt(setAry[0])) {
                         case 1:
-                            if (setAry[1].equals("true")){ hasClover2 = true; }
+                            if (setAry[1].equals("true")) {
+                                hasClover2 = true;
+                            }
                             break;
                         case 2:
-                            if (setAry[1].equals("true")){ hasButterfly2 = true; }
+                            if (setAry[1].equals("true")) {
+                                hasButterfly2 = true;
+                            }
                             break;
                         case 3:
-                            if (setAry[1].equals("true")){ hasClover = true; }
+                            if (setAry[1].equals("true")) {
+                                hasClover = true;
+                            }
                             break;
                         case 4:
-                            if (setAry[1].equals("true")){ hasLadybug = true; }
+                            if (setAry[1].equals("true")) {
+                                hasLadybug = true;
+                            }
                             break;
                         case 5:
-                            if (setAry[1].equals("true")){ hasButterfly = true; }
+                            if (setAry[1].equals("true")) {
+                                hasButterfly = true;
+                            }
                             break;
                         case 6:
-                            if (setAry[1].equals("true")){ hasLeaf = true; }
+                            if (setAry[1].equals("true")) {
+                                hasLeaf = true;
+                            }
                             break;
                         case 7:
-                            if (setAry[1].equals("true")){ hasPot = true; }
+                            if (setAry[1].equals("true")) {
+                                hasPot = true;
+                            }
                             break;
                     }
                 }
@@ -351,11 +381,9 @@ public class MainActivity extends AppCompatActivity {
             boolean hasButterfly2 = sp.getBoolean("@string/butterfly2", false);
             boolean hasClover = sp.getBoolean("@string/clover", false);
             boolean hasLadybug = sp.getBoolean("@string/ladybug", false);
-            boolean hasButterfly = sp.getBoolean("@string/clover2", false);
+            boolean hasButterfly = sp.getBoolean("@string/butterfly", false);
             boolean hasLeaf = sp.getBoolean("@string/leaf", false);
             boolean hasPot = sp.getBoolean("@string/pot", false);
-
-            Log.e("showMainFlower HAS_POT", String.valueOf(hasPot));
 
             ImageView flower = (ImageView) findViewById(R.id.flower);
             if (score > 60) {
@@ -597,5 +625,101 @@ public class MainActivity extends AppCompatActivity {
                 getFlowerScore();
             }
         }).start();
+    }
+
+    private void syncFlower() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
+        query.whereEqualTo("username", sp.getString("@string/username", null));
+        query.orderByDescending("createdAt");
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                int ave = -1;
+                int count = -1;
+
+                if (object == null) {
+                    Log.d("syncFlower", "Error:" + e.getMessage());
+                } else {
+                    count = object.getInt("count");
+                    ave = object.getInt("ave");
+
+                    boolean hasClover2 = false;
+                    boolean hasButterfly2 = false;
+                    boolean hasClover = false;
+                    boolean hasLadybug = false;
+                    boolean hasButterfly = false;
+                    boolean hasLeaf = false;
+                    boolean hasPot = false;
+
+                    int untilNext = -100;
+
+                    if (count >= 1) {
+                        hasPot = true;
+                        untilNext = 2 - count;
+
+                        if (count >= 2) {
+                            hasLeaf = true;
+                            untilNext = 3 - count;
+
+                            if (count >= 3) {
+                                hasButterfly = true;
+                                untilNext = 5 - count;
+
+                                if (count >= 5) {
+                                    hasLadybug = true;
+                                    untilNext = 8 - count;
+
+                                    if (count >= 8) {
+                                        hasClover = true;
+                                        untilNext = 11 - count;
+
+                                        if (count >= 11) {
+                                            hasButterfly2 = true;
+                                            untilNext = 14 - count;
+
+                                            if (count >= 14) {
+                                                hasClover2 = true;
+                                                untilNext = 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else if (count == 0) {
+                        untilNext = 1 - count;
+                    }
+
+                    sp.edit().putBoolean("@string/pot", hasPot).commit();
+                    sp.edit().putBoolean("@string/leaf", hasLeaf).commit();
+                    sp.edit().putBoolean("@string/butterfly", hasButterfly).commit();
+                    sp.edit().putBoolean("@string/ladybug", hasLadybug).commit();
+                    sp.edit().putBoolean("@string/clover", hasClover).commit();
+                    sp.edit().putBoolean("@string/butterfly2", hasButterfly2).commit();
+                    sp.edit().putBoolean("@string/clover2", hasClover2).commit();
+
+                    sp.edit().putInt("@string/until_next", untilNext).commit();
+                    Log.d("syncFlower", "FlowerRecord ave:" + String.valueOf(ave));
+                    Log.d("syncFlower", "FlowerRecord count:" + String.valueOf(count));
+
+                    showMainFlower();
+                }
+            }
+        });
+    }
+
+    private void setAlarms() {
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 10, 31, 1);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 12, 01, 2);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 13, 31, 3);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 15, 01, 4);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 16, 31, 5);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 18, 01, 6);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 19, 31, 7);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 21, 01, 8);
+        SessionReceiver.scheduleAlarms(getApplicationContext(), 9, 00, 10);
     }
 }

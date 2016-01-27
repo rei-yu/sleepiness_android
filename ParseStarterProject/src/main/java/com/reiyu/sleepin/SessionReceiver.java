@@ -19,17 +19,6 @@ import java.util.Calendar;
 import java.util.Random;
 
 public class SessionReceiver extends BroadcastReceiver {
-    private static final int alarm1 = 1;
-    private static final int alarm2 = 2;
-    private static final int alarm3 = 3;
-    private static final int alarm4 = 4;
-    private static final int alarm5 = 5;
-    private static final int alarm6 = 6;
-    private static final int alarm7 = 7;
-    private static final int alarm8 = 8;
-
-    private static final int alarm10 = 10;
-
     @Override
     public void onReceive(Context context, Intent intent) {
         int alarm_id = intent.getIntExtra("@string/alarm_id", 0);
@@ -55,7 +44,7 @@ public class SessionReceiver extends BroadcastReceiver {
             notificationManager.notify(R.string.app_name, notification);
         } else if (alarm_id == 10) {
             intentNew = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentNew, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm_id, intentNew, 0);
 
             Notification notification = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.mipmap.icon)
@@ -82,7 +71,7 @@ public class SessionReceiver extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         Intent intent = new Intent(context, SessionReceiver.class);
         intent.putExtra("@string/alarm_id", alarm_id);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
