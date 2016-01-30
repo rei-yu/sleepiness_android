@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), SignInFragment.class));
         } else {
             setAlarms();
+            syncFlower();
+            groupSync();
 
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
