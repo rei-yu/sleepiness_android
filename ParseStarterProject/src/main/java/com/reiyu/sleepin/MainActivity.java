@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setAlarms();
             syncFlower();
-            groupSync();
 
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
@@ -310,57 +309,57 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     if (score > 60) {
                         if (hasClover2) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy7, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy7, 300, 300);
                         } else if (hasButterfly2) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy6, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy6, 300, 300);
                         } else if (hasClover) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy5, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy5, 300, 300);
                         } else if (hasLadybug) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy4, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy4, 300, 300);
                         } else if (hasButterfly) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy3, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy3, 300, 300);
                         } else if (hasLeaf) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy2, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy2, 300, 300);
                         } else if (hasPot) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy1, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy1, 300, 300);
                         } else {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.happy, 300, 300);
                         }
                     } else if (score > 30) {
                         if (hasClover2) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad7, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad7, 300, 300);
                         } else if (hasButterfly2) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad6, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad6, 300, 300);
                         } else if (hasClover) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad5, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad5, 300, 300);
                         } else if (hasLadybug) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad4, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad4, 300, 300);
                         } else if (hasButterfly) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad3, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad3, 300, 300);
                         } else if (hasLeaf) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad2, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad2, 300, 300);
                         } else if (hasPot) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad1, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad1, 300, 300);
                         } else {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.sad, 300, 300);
                         }
                     } else {
                         if (hasClover2) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry7, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry7, 300, 300);
                         } else if (hasButterfly2) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry6, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry6, 300, 300);
                         } else if (hasClover) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry5, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry5, 300, 300);
                         } else if (hasLadybug) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry4, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry4, 300, 300);
                         } else if (hasButterfly) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry3, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry3, 300, 300);
                         } else if (hasLeaf) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry2, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry2, 300, 300);
                         } else if (hasPot) {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry1, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry1, 300, 300);
                         } else {
-                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry, 350, 350);
+                            flowerBmpSmall = decodeSampledBitmapFromResource(getResources(), R.drawable.cry, 300, 300);
                         }
                     }
                     flower.setImageBitmap(flowerBmpSmall);
@@ -390,57 +389,57 @@ public class MainActivity extends AppCompatActivity {
             ImageView flower = (ImageView) findViewById(R.id.flower);
             if (score > 60) {
                 if (hasClover2) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy7, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy7, 800, 800);
                 } else if (hasButterfly2) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy6, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy6, 800, 800);
                 } else if (hasClover) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy5, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy5, 800, 800);
                 } else if (hasLadybug) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy4, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy4, 800, 800);
                 } else if (hasButterfly) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy3, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy3, 800, 800);
                 } else if (hasLeaf) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy2, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy2, 800, 800);
                 } else if (hasPot) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy1, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy1, 800, 800);
                 } else {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.happy, 800, 800);
                 }
             } else if (score > 30) {
                 if (hasClover2) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad7, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad7, 800, 800);
                 } else if (hasButterfly2) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad6, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad6, 800, 800);
                 } else if (hasClover) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad5, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad5, 800, 800);
                 } else if (hasLadybug) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad4, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad4, 800, 800);
                 } else if (hasButterfly) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad3, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad3, 800, 800);
                 } else if (hasLeaf) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad2, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad2, 800, 800);
                 } else if (hasPot) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad1, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad1, 800, 800);
                 } else {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.sad, 800, 800);
                 }
             } else {
                 if (hasClover2) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry7, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry7, 800, 800);
                 } else if (hasButterfly2) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry6, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry6, 800, 800);
                 } else if (hasClover) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry5, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry5, 800, 800);
                 } else if (hasLadybug) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry4, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry4, 800, 800);
                 } else if (hasButterfly) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry3, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry3, 800, 800);
                 } else if (hasLeaf) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry2, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry2, 800, 800);
                 } else if (hasPot) {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry1, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry1, 800, 800);
                 } else {
-                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry, 1000, 1000);
+                    flowerBmpLarge = decodeSampledBitmapFromResource(getResources(), R.drawable.cry, 800, 800);
                 }
             }
             flower.setImageBitmap(flowerBmpLarge);

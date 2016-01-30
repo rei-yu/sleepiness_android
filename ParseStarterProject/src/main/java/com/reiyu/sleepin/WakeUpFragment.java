@@ -39,6 +39,7 @@ import java.util.List;
  */
 public class WakeUpFragment extends AppCompatActivity {
     String date;
+    Bitmap bmp1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +147,16 @@ public class WakeUpFragment extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        if (bmp1 != null) {
+            bmp1.recycle();
+            bmp1 = null;
+        }
+
+        super.onStop();
     }
 
     @Override
@@ -421,7 +432,6 @@ public class WakeUpFragment extends AppCompatActivity {
         }
 
         ImageView stamp = new ImageView(WakeUpFragment.this);
-        Bitmap bmp1;
         switch (count) {
             case 1:
                 bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.stamp1);
