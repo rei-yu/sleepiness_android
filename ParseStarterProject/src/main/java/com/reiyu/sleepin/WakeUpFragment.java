@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -44,6 +45,7 @@ public class WakeUpFragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setAlarms();
+        getCount();
 
         setContentView(R.layout.fragment_wake_up);
         final Button button = (Button) findViewById(R.id.save_record);
@@ -479,5 +481,28 @@ public class WakeUpFragment extends AppCompatActivity {
         alert.setPositiveButton("OK", null);
 
         alert.show();
+    }
+
+    private void getCount() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("FlowerRecord");
+        query.whereEqualTo("username", sp.getString("@string/username", null));
+        query.orderByDescending("createdAt");
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (object == null) {
+                    Log.d("score", "The getFirst request failed.");
+                } else {
+                    Log.d("score", "Retrieved the object.");
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    int count = object.getInt("count");
+
+                    Log.e("count retrieval", String.valueOf(count));
+                    sp.edit().putInt("@string/count", count).commit();
+                }
+            }
+        });
     }
 }
