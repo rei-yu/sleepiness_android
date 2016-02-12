@@ -703,6 +703,7 @@ public class MainActivity extends AppCompatActivity {
                     sp.edit().putBoolean("@string/clover2", hasClover2).commit();
 
                     sp.edit().putInt("@string/until_next", untilNext).commit();
+                    sp.edit().putInt("@string/count", count).commit();
                     Log.d("syncFlower", "FlowerRecord ave:" + String.valueOf(ave));
                     Log.d("syncFlower", "FlowerRecord count:" + String.valueOf(count));
 
