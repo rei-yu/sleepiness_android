@@ -52,6 +52,9 @@
             android:name=".ReflectFragment"
             android:label="@string/reflect"/>
 
+        <activity android:name=".GraphFragment"
+                  android:label="@string/graph" />
+
         <service android:name="com.parse.PushService"/>
 
         <receiver

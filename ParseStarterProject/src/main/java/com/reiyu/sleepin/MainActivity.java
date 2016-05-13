@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_get_member) {
             getGroup();
             return true;
+        } else if (id == R.id.action_graph) {
+            startActivity(new Intent(getApplicationContext(), GraphFragment.class));
         }
         return super.onOptionsItemSelected(item);
     }

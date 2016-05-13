@@ -8,12 +8,14 @@
     <string name="sign_in">Sign in</string>
     <string name="wake_up">Sleep Record</string>
     <string name="reflect">Session Reflection</string>
+    <string name="graph">Sleepiness Graph</string>
 
     <!-- menu labels -->
     <string name="action_sign_out">Sign out</string>
     <string name="action_group_sync">Sync Data</string>
     <string name="action_get_member">Sync Member</string>
     <string name="action_flower_sync">Sync My Flower</string>
+    <string name="action_graph">Sleepiness Graph</string>
 
     <!-- shared preference labels -->
     <string name="signed_in">SIGNED_IN</string>
