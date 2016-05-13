@@ -349,7 +349,6 @@ public class ReflectFragment extends AppCompatActivity {
             ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
             postACL.setPublicReadAccess(true);
             testObject.setACL(postACL);
-
             testObject.put("date", date);
             testObject.put("session", session_num);
             testObject.put("sleepiness", sleepiness);

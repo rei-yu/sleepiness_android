@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
                         " data not yet recorded");
                 startActivity(new Intent(getApplicationContext(), WakeUpFragment.class));
             } else {
-                String msg = sp.getString("@string/username", null) + "'s Flower";
+//                String msg = sp.getString("@string/username", null) + "'s Flower";
+                String msg = "User" + "'s Flower";
                 setTitle(msg);
 
                 setView();
@@ -252,10 +253,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void showFlower(ImageView flower, int score, String name) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if (sp.getStringSet("@string/flower_state" + name, null) != null) {
-            ArrayList<String> flowerStateList = new ArrayList<>(sp.getStringSet("@string/flower_state" + name, null));
-            if (flowerStateList.size() == 7) {
+//
+//        if (sp.getStringSet("@string/flower_state" + name, null) != null) {
+//            ArrayList<String> flowerStateList = new ArrayList<>(sp.getStringSet("@string/flower_state" + name, null));
+//            if (flowerStateList.size() == 7) {
                 boolean hasClover2 = false;
                 boolean hasButterfly2 = false;
                 boolean hasClover = false;
@@ -264,47 +265,83 @@ public class MainActivity extends AppCompatActivity {
                 boolean hasLeaf = false;
                 boolean hasPot = false;
 
-                for (String setStr : flowerStateList) {
-                    String[] setAry = setStr.split(",", 0);
 
-                    switch (Integer.parseInt(setAry[0])) {
-                        case 1:
-                            if (setAry[1].equals("true")) {
-                                hasClover2 = true;
-                            }
-                            break;
-                        case 2:
-                            if (setAry[1].equals("true")) {
-                                hasButterfly2 = true;
-                            }
-                            break;
-                        case 3:
-                            if (setAry[1].equals("true")) {
-                                hasClover = true;
-                            }
-                            break;
-                        case 4:
-                            if (setAry[1].equals("true")) {
-                                hasLadybug = true;
-                            }
-                            break;
-                        case 5:
-                            if (setAry[1].equals("true")) {
-                                hasButterfly = true;
-                            }
-                            break;
-                        case 6:
-                            if (setAry[1].equals("true")) {
-                                hasLeaf = true;
-                            }
-                            break;
-                        case 7:
-                            if (setAry[1].equals("true")) {
-                                hasPot = true;
-                            }
-                            break;
-                    }
-                }
+        if (name.equals("member1")) {
+            hasClover2 = true;
+            hasButterfly2 = true;
+            hasClover = true;
+            hasLadybug = true;
+            hasButterfly = true;
+            hasLeaf = true;
+            hasPot = true;
+        } else if (name.equals("member2")) {
+            hasClover2 = false;
+            hasButterfly2 = false;
+            hasClover = false;
+            hasLadybug = false;
+            hasButterfly = false;
+            hasLeaf = false;
+            hasPot = true;
+        } else if (name.equals("member3")) {
+            hasClover2 = false;
+            hasButterfly2 = false;
+            hasClover = false;
+            hasLadybug = false;
+            hasButterfly = false;
+            hasLeaf = true;
+            hasPot = true;
+        } else {
+            hasClover2 = false;
+            hasButterfly2 = true;
+            hasClover = true;
+            hasLadybug = true;
+            hasButterfly = true;
+            hasLeaf = true;
+            hasPot = true;
+        }
+
+
+//                for (String setStr : flowerStateList) {
+//                    String[] setAry = setStr.split(",", 0);
+//
+//                    switch (Integer.parseInt(setAry[0])) {
+//                        case 1:
+//                            if (setAry[1].equals("true")) {
+//                                hasClover2 = true;
+//                            }
+//                            break;
+//                        case 2:
+//                            if (setAry[1].equals("true")) {
+//                                hasButterfly2 = true;
+//                            }
+//                            break;
+//                        case 3:
+//                            if (setAry[1].equals("true")) {
+//                                hasClover = true;
+//                            }
+//                            break;
+//                        case 4:
+//                            if (setAry[1].equals("true")) {
+//                                hasLadybug = true;
+//                            }
+//                            break;
+//                        case 5:
+//                            if (setAry[1].equals("true")) {
+//                                hasButterfly = true;
+//                            }
+//                            break;
+//                        case 6:
+//                            if (setAry[1].equals("true")) {
+//                                hasLeaf = true;
+//                            }
+//                            break;
+//                        case 7:
+//                            if (setAry[1].equals("true")) {
+//                                hasPot = true;
+//                            }
+//                            break;
+//                    }
+//                }
 
                 if (score < 0) {
                     Toast.makeText(getApplicationContext(), "Could not load score", Toast.LENGTH_LONG).show();
@@ -366,11 +403,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     flower.setImageBitmap(flowerBmpSmall);
                 }
-            } else {
-                Toast.makeText(getApplicationContext(), "Please Sync Again", Toast.LENGTH_SHORT).show();
-                Log.e("showFlower", "state not enough");
-            }
-        }
+//            } else {
+//                Toast.makeText(getApplicationContext(), "Please Sync Again", Toast.LENGTH_SHORT).show();
+//                Log.e("showFlower", "state not enough");
+//            }
+//        }
     }
 
     private void showMainFlower() {
@@ -620,14 +657,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         showMainFlower();
         showDetail();
+        showTest();
         setFab();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getFlowerScore();
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                getFlowerScore();
+//            }
+//        }).start();
     }
 
     private void syncFlower() {
@@ -725,5 +763,27 @@ public class MainActivity extends AppCompatActivity {
         SessionReceiver.scheduleAlarms(getApplicationContext(), 19, 31, 7);
         SessionReceiver.scheduleAlarms(getApplicationContext(), 21, 01, 8);
         SessionReceiver.scheduleAlarms(getApplicationContext(), 9, 00, 10);
+    }
+
+    public void showTest() {
+        ImageView flower;
+        TextView tag;
+
+        flower = (ImageView) findViewById(R.id.flower4);
+        showFlower(flower, 50, "member4");
+        tag = (TextView) findViewById(R.id.flower4text);
+        tag.setText("member4" + "'s");
+        flower = (ImageView) findViewById(R.id.flower3);
+        showFlower(flower, 70, "member3");
+        tag = (TextView) findViewById(R.id.flower3text);
+        tag.setText("member3" + "'s");
+        flower = (ImageView) findViewById(R.id.flower2);
+        showFlower(flower, 20, "member2");
+        tag = (TextView) findViewById(R.id.flower2text);
+        tag.setText("member2" + "'s");
+        flower = (ImageView) findViewById(R.id.flower1);
+        showFlower(flower, 100, "member1");
+        tag = (TextView) findViewById(R.id.flower1text);
+        tag.setText("member1" + "'s");
     }
 }
